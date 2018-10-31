@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, authorization');
-    res.setHeader("Access-Control-Allow-Methods", 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
 });
 var ExtractJwt = passport_jwt_1.default.ExtractJwt;
@@ -65,8 +65,8 @@ var strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
 });
 passport_1.default.use(strategy);
 app.use(passport_1.default.initialize());
-//------------ JWT END -------------------------------------
-//------------ ROUTING ------------------------------------
+// ------------ JWT END -------------------------------------
+// ------------ ROUTING ------------------------------------
 app.post('/login', function (req, res) {
     var name = req.body.username;
     var pass = req.body.password;
@@ -135,7 +135,7 @@ app.post('/register', function (req, res) {
         console.log('Register catch');
     });
 });
-app.get("/secret", passport_1.default.authenticate('jwt', { session: false }), function (req, res) {
+app.get('/secret', passport_1.default.authenticate('jwt', { session: false }), function (req, res) {
     console.log('Secret Accessed');
     res.send({ message: "Success! You can not see this without a token" });
 });

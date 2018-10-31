@@ -61,7 +61,7 @@ var bodyParser = __importStar(require("body-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var axios_1 = __importDefault(require("axios"));
 var socket_io_1 = __importDefault(require("socket.io"));
-//START MONGOOSE---------------------------------------
+// START MONGOOSE---------------------------------------
 mongoose_1.default.connect(process.env.MONGODB_URI || 'mongodb://localhost/zchat-project-notification-1', { useNewUrlParser: true });
 var Schema = mongoose_1.default.Schema;
 var userSchema = new Schema({
@@ -96,13 +96,12 @@ var conversationSchema = new Schema({
             ref: 'Message'
         }],
 });
-;
 var User = mongoose_1.default.model('User', userSchema, 'User');
 var Message = mongoose_1.default.model('Message', messageSchema, 'Message');
 var Conversation = mongoose_1.default.model('Conversation', conversationSchema, 'Conversation');
 mongoose_1.default.set('useFindAndModify', false);
-//END MONGOOSE---------------------------------------
-//START EXPRESS-----------------------------------
+// END MONGOOSE---------------------------------------
+// START EXPRESS-----------------------------------
 var app = express_1.default();
 var port = process.env.PORT || 3001;
 app.use(bodyParser.json());
@@ -114,7 +113,7 @@ app.use(express_1.default.static(publicPath));
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, authorization');
-    res.setHeader("Access-Control-Allow-Methods", 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
 });
 // ---------------------------------------
@@ -147,7 +146,7 @@ app.post('/save-user', function (req, res) {
         console.log(e);
     });
 });
-//------------------------------
+// ------------------------------
 app.post('/add-contact', function (req, res) {
     console.log(req.body);
     var contact = { username: req.body.contact };
@@ -164,7 +163,7 @@ app.post('/add-contact', function (req, res) {
                         emitContacts(mainUser.username);
                         updateFriendContact(mainUser.username);
                     }
-                    //console.log(obj_user.msg);
+                    // console.log(obj_user.msg);
                     console.log('test');
                     res.send({ msg: obj_user.msg });
                 });
@@ -175,7 +174,7 @@ app.post('/add-contact', function (req, res) {
         }
     });
 });
-//-------------------------------------------------
+// -------------------------------------------------
 app.post('/conversation-id', function (req, res) {
     console.log(req.body);
     var conv_id = req.body;
@@ -184,7 +183,7 @@ app.post('/conversation-id', function (req, res) {
         res.send(c);
     });
 });
-//-------------------------------------------------
+// -------------------------------------------------
 function addContactDB(user, contact) {
     return __awaiter(this, void 0, void 0, function () {
         var contact_id, contacts_arr;
@@ -202,10 +201,10 @@ function addContactDB(user, contact) {
                 case 1:
                     contact_id = _a.sent();
                     return [4 /*yield*/, User.findOne(user)
-                            .then(function (user) {
-                            if (user) {
-                                console.log(user.contacts);
-                                return user.contacts;
+                            .then(function (u) {
+                            if (u) {
+                                console.log(u.contacts);
+                                return u.contacts;
                             }
                         })];
                 case 2:
@@ -241,10 +240,10 @@ function createConversation(user1_id, user2_id) {
         console.log('Conversation ', c);
     });
 }
-;
 var users = {};
-//START SOCKETS-----------------------------------
+// START SOCKETS-----------------------------------
 var io = socket_io_1.default(server);
+// tslint:disable-next-line:no-shadowed-variable
 io.sockets.on('connection', function (socket) {
     socket.on('test', function (data) {
         console.log(socket.nickname, data);
@@ -272,7 +271,7 @@ io.sockets.on('connection', function (socket) {
         updateFriendContact(socket.nickname);
     });
 });
-//-------------END SOCKETS------------------
+// -------------END SOCKETS------------------
 function emitContacts(socket_nickname) {
     return __awaiter(this, void 0, void 0, function () {
         var list, error_1;
@@ -284,7 +283,7 @@ function emitContacts(socket_nickname) {
                     return [4 /*yield*/, populateContacts(socket_nickname)];
                 case 1:
                     list = _a.sent();
-                    //console.log(list);
+                    // console.log(list);
                     users[socket_nickname].emit('list contacts', list);
                     _a.label = 2;
                 case 2: return [3 /*break*/, 4];

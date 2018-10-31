@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6 box">
+      <form [formGroup]="projectForm" class="form-group"
+      (ngSubmit)="onSubmit()">
+          <label for="username">Username</label>
+          <input class="form-control" id="username" formControlName="username">
+          <span class='alert' *ngIf="show_msg">{{msg}}</span>
+          <br>
+          <label for="password">Password</label>
+          <input class="form-control" id="password" formControlName="password">
+          <br>
+        <button class="btn btn-primary btn-login btn-lg" type="submit" [disabled]="!projectForm.valid">Login</button>
+      </form>
+      <hr>
+      <span>Don't have an account? </span><a routerLink="/register">Create One</a>
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
+</div>

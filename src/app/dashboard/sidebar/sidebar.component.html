@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <div id="contact-list">
+    <p>Contact List</p>
+
+    <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" *ngFor="let c of contactlist">
+        <i class="fas fa-user"></i><span>{{c.username}}</span>
+    </button>
+
+  </div>
+
+  <div id="addContact-bar">
+      <span *ngIf="show_msg">{{msg}}</span>
+      <form [formGroup]="contactForm" class="form-group"
+      (ngSubmit)="onAdd()">
+        <input class="form-control" id="send-message" formControlName="contact">
+        <button class="btn btn-primary" type="submit">Add</button>
+    </form>
+  </div>
+
+</div>

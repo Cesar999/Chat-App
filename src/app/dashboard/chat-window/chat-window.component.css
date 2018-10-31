@@ -1,0 +1,22 @@
+.wrapper{
+  border: 2px solid blue;
+  height: 86vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#message-chat{
+  border: 2px solid orange;
+  margin: 1%;
+  flex: 1;
+}
+
+#message-bar{
+  border: 2px solid green;
+  margin: 1%;
+}
+
+#message-bar form{
+  width: 100%;
+  display: flex;
+}

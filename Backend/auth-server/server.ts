@@ -118,7 +118,7 @@ app.post('/login', (req, res) => {
             res.send({msg: 'Username already exists', flag: false});
         } else {
             bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(pass, salt, (err, hashedPass) => {
+                bcrypt.hash(pass, salt, (error, hashedPass) => {
                     const user1: any = new User({
                         username: name,
                         password:  hashedPass});
@@ -128,8 +128,8 @@ app.post('/login', (req, res) => {
                     })
                     .then(() => {
                         User.findOne({username: user1.username})
-                        .then((user: any) => {
-                            const temp = {_id: user._id, username: user.username};
+                        .then((u: any) => {
+                            const temp = {_id: u._id, username: u.username};
                             console.log(temp);
                             axios.post('http://localhost:3001/save-user', temp)
                             .then((response: any) => {console.log(response.data); })

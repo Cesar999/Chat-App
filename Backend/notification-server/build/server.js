@@ -342,7 +342,7 @@ function populateContacts(data_username) {
                                     case 5: return [2 /*return*/];
                                 }
                             });
-                        }); }).catch(function (c) { return console.log('populateContacts catch'); })];
+                        }); }).catch(function (c) { return console.log(c); })];
                 case 1:
                     _a.sent();
                     return [4 /*yield*/, list];
@@ -369,7 +369,7 @@ function getConversationId(user_id, contact_id) {
         var conv_id;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, Conversation.findOne({ participants: { $in: [user_id, contact_id] } })
+                case 0: return [4 /*yield*/, Conversation.findOne({ participants: [user_id, contact_id] })
                         .then(function (c) {
                         console.log(c);
                         return c._id;

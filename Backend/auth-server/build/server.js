@@ -107,7 +107,7 @@ app.post('/register', function (req, res) {
         }
         else {
             bcrypt_1.default.genSalt(10, function (err, salt) {
-                bcrypt_1.default.hash(pass, salt, function (err, hashedPass) {
+                bcrypt_1.default.hash(pass, salt, function (error, hashedPass) {
                     var user1 = new User({
                         username: name,
                         password: hashedPass
@@ -118,8 +118,8 @@ app.post('/register', function (req, res) {
                     })
                         .then(function () {
                         User.findOne({ username: user1.username })
-                            .then(function (user) {
-                            var temp = { _id: user._id, username: user.username };
+                            .then(function (u) {
+                            var temp = { _id: u._id, username: u.username };
                             console.log(temp);
                             axios_1.default.post('http://localhost:3001/save-user', temp)
                                 .then(function (response) { console.log(response.data); })

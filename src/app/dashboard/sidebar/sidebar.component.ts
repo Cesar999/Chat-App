@@ -4,6 +4,7 @@ import { AppService } from 'src/app/app.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { WebsocketService } from 'src/app/websocket.service';
+import { DashboardService } from '../dashboard.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -17,7 +18,7 @@ export class SidebarComponent implements OnInit {
   status: false;
 
   constructor(private appService: AppService, private router: Router, private cookieService: CookieService,
-  private socket: WebsocketService) { }
+  private socket: WebsocketService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
     this.contactForm = new FormGroup({
@@ -27,6 +28,7 @@ export class SidebarComponent implements OnInit {
     this.socket.getListListener().subscribe(data => {
       console.log(data);
       this.contactlist = data;
+      this.dashboardService.setList(data);
     });
   }
 
@@ -78,6 +80,7 @@ export class SidebarComponent implements OnInit {
       (response) => {
         if (response['authorization'] === true ) {
           this.getConversation(c);
+          this.dashboardService.listenContact(c);
         } else {
         }
       },

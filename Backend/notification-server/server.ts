@@ -279,7 +279,7 @@ async function populateContacts(data_username: string) {
             }
             return list;
         }
-    }).catch(c => console.log('populateContacts catch'));
+    }).catch(c => console.log(c));
 
     return await list;
 }
@@ -298,7 +298,7 @@ function updateFriendContact(nickname: string) {
 }
 
 async function getConversationId(user_id: any, contact_id: any) {
-    const conv_id = await Conversation.findOne({participants: {$in: [user_id, contact_id]}})
+    const conv_id = await Conversation.findOne({participants: [user_id, contact_id]})
     .then((c) => {
         console.log(c);
         return c._id;

@@ -358,7 +358,7 @@ function updateFriendContact(nickname) {
         for (var _i = 0, _a = user.contacts; _i < _a.length; _i++) {
             var c = _a[_i];
             if (Object.keys(users).indexOf(c.username) > -1) {
-                console.log(c.username);
+                // console.log(c.username);
                 emitContacts(c.username);
             }
         }
@@ -369,9 +369,9 @@ function getConversationId(user_id, contact_id) {
         var conv_id;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, Conversation.findOne({ participants: [user_id, contact_id] })
+                case 0: return [4 /*yield*/, Conversation.findOne({ participants: { $all: [user_id, contact_id] } })
                         .then(function (c) {
-                        console.log(c);
+                        console.log(c, 'fail');
                         return c._id;
                     })];
                 case 1:

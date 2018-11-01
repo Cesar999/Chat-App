@@ -290,7 +290,7 @@ function updateFriendContact(nickname: string) {
     .then((user: any) => {
         for (const c of user.contacts) {
             if (Object.keys(users).indexOf(c.username) > -1) {
-                console.log(c.username);
+                // console.log(c.username);
                 emitContacts(c.username);
             }
         }
@@ -298,9 +298,9 @@ function updateFriendContact(nickname: string) {
 }
 
 async function getConversationId(user_id: any, contact_id: any) {
-    const conv_id = await Conversation.findOne({participants: [user_id, contact_id]})
+    const conv_id = await Conversation.findOne({participants: {$all: [user_id, contact_id]}})
     .then((c) => {
-        console.log(c);
+        console.log(c, 'fail');
         return c._id;
     });
     return await conv_id;

@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import socket from 'socket.io';
+import { ObjectId } from 'bson';
 
 // START MONGOOSE---------------------------------------
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/zchat-project-notification-1', { useNewUrlParser: true });
@@ -209,8 +210,10 @@ const io = socket(server);
 // tslint:disable-next-line:no-shadowed-variable
 io.sockets.on('connection', (socket: ISocket) => {
 
-    socket.on('test', (data) => {
-        console.log(socket.nickname, data);
+    socket.on('chat message', async (data) => {
+        console.log(data);
+        await storeMessage(data);
+        await returnConversation(data._id);
     });
 
     socket.on('user online', (data: any) => {
@@ -305,3 +308,24 @@ async function getConversationId(user_id: any, contact_id: any) {
     });
     return await conv_id;
 }
+
+async function storeMessage(data: any) {
+    const user = await User.findOne({username: data.author});
+    const msg = new Message({
+        content: data.msg,
+        conversation: data.conv_id,
+        author: user._id
+    });
+    const message = await msg.save();
+
+    Conversation.findById({_id: data.conv_id})
+    .then((c: any) => {
+      c.messages.push(message._id);
+      c.save();
+    });
+}
+
+function returnConversation(_id: ObjectId) {
+
+}
+

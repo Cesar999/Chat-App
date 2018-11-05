@@ -55,6 +55,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var bodyParser = __importStar(require("body-parser"));
@@ -245,9 +246,21 @@ var users = {};
 var io = socket_io_1.default(server);
 // tslint:disable-next-line:no-shadowed-variable
 io.sockets.on('connection', function (socket) {
-    socket.on('test', function (data) {
-        console.log(socket.nickname, data);
-    });
+    socket.on('chat message', function (data) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(data);
+                    return [4 /*yield*/, storeMessage(data)];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, returnConversation(data._id)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     socket.on('user online', function (data) {
         if (data.username !== undefined) {
             socket.nickname = data.username;
@@ -381,4 +394,32 @@ function getConversationId(user_id, contact_id) {
             }
         });
     });
+}
+function storeMessage(data) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user, msg, message;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, User.findOne({ username: data.author })];
+                case 1:
+                    user = _a.sent();
+                    msg = new Message({
+                        content: data.msg,
+                        conversation: data.conv_id,
+                        author: user._id
+                    });
+                    return [4 /*yield*/, msg.save()];
+                case 2:
+                    message = _a.sent();
+                    Conversation.findById({ _id: data.conv_id })
+                        .then(function (c) {
+                        c.messages.push(message._id);
+                        c.save();
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function returnConversation(_id) {
 }

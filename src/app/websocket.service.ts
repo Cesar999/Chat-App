@@ -16,8 +16,8 @@ export class WebsocketService {
   }
 
 // ---------------------------------------
-  sendMsg(msg) {
-    this.socket.emit('test', msg);
+  sendMsg(data) {
+    this.socket.emit('chat message', data);
   }
 
   listenMsg() {

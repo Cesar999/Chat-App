@@ -3,7 +3,6 @@ import * as bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import socket from 'socket.io';
-import { ObjectId } from 'bson';
 
 // START MONGOOSE---------------------------------------
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/zchat-project-notification-1', { useNewUrlParser: true });
@@ -140,6 +139,18 @@ app.post('/add-contact', function(req, res) {
 
 });
 
+
+app.post('/delete-contact', async function(req, res) {
+  const contact = {username: req.body.contact};
+  const mainUser = {username: req.body.mainUser};
+  console.log(req.body);
+  await deleteContact(contact, mainUser);
+  const msg = await deleteContact(mainUser, contact);
+  await emitContacts(mainUser.username);
+  await emitContacts(contact.username);
+  await res.send(msg);
+});
+
 // -------------------------------------------------
 
 
@@ -161,6 +172,36 @@ app.post('/conversation-id', function(req, res) {
 });
 
 // -------------------------------------------------
+
+async function deleteContact(contact, mainUser) {
+  const contact_id = await User.findOne(contact)
+  .then((c) => {
+      if (c) {
+          console.log(c._id, 'DELETE');
+          return c._id;
+      }
+  });
+
+const contacts_arr = await User.findOne(mainUser)
+  .then((u) => {
+      if (u) {
+          console.log(u.contacts, 'DELETE');
+          return u.contacts;
+      }
+  });
+
+  if (contacts_arr) {
+    if (contacts_arr.indexOf(contact_id) !== -1) {
+        const index = contacts_arr.indexOf(contact_id);
+        await contacts_arr.splice(index, 1);
+        await User.findOneAndUpdate(mainUser, { $set: {'contacts': contacts_arr}}).then(c => console.log(c));
+        console.log(contacts_arr, 'DELETE');
+        return await {msg: `User deleted`};
+    } else {
+        return await {msg: `User not found`};
+    }
+  }
+}
 
 async function addContactDB(user: any, contact: any) {
     console.log(user, contact);

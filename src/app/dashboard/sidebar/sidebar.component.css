@@ -32,15 +32,23 @@
 }
 
 .contact-box{
-  width: 100%;
   margin: 1%;
   text-align: center;
   font-size: 1.2rem;
+  flex-grow: 1;
 }
 
+.delete-btn{
+  margin: 1%;
+  text-align: center;
+}
 
 .contact-box i{
   float: left;
   margin: 2%;
   margin-left: 8%;
+}
+
+.btns-box{
+  display: flex;
 }

@@ -175,6 +175,35 @@ app.post('/add-contact', function (req, res) {
         }
     });
 });
+app.post('/delete-contact', function (req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var contact, mainUser, msg;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    contact = { username: req.body.contact };
+                    mainUser = { username: req.body.mainUser };
+                    console.log(req.body);
+                    return [4 /*yield*/, deleteContact(contact, mainUser)];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, deleteContact(mainUser, contact)];
+                case 2:
+                    msg = _a.sent();
+                    return [4 /*yield*/, emitContacts(mainUser.username)];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, emitContacts(contact.username)];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, res.send(msg)];
+                case 5:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+});
 // -------------------------------------------------
 app.post('/conversation-id', function (req, res) {
     console.log(req.body);
@@ -193,6 +222,48 @@ app.post('/conversation-id', function (req, res) {
     });
 });
 // -------------------------------------------------
+function deleteContact(contact, mainUser) {
+    return __awaiter(this, void 0, void 0, function () {
+        var contact_id, contacts_arr, index;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, User.findOne(contact)
+                        .then(function (c) {
+                        if (c) {
+                            console.log(c._id, 'DELETE');
+                            return c._id;
+                        }
+                    })];
+                case 1:
+                    contact_id = _a.sent();
+                    return [4 /*yield*/, User.findOne(mainUser)
+                            .then(function (u) {
+                            if (u) {
+                                console.log(u.contacts, 'DELETE');
+                                return u.contacts;
+                            }
+                        })];
+                case 2:
+                    contacts_arr = _a.sent();
+                    if (!contacts_arr) return [3 /*break*/, 8];
+                    if (!(contacts_arr.indexOf(contact_id) !== -1)) return [3 /*break*/, 6];
+                    index = contacts_arr.indexOf(contact_id);
+                    return [4 /*yield*/, contacts_arr.splice(index, 1)];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, User.findOneAndUpdate(mainUser, { $set: { 'contacts': contacts_arr } }).then(function (c) { return console.log(c); })];
+                case 4:
+                    _a.sent();
+                    console.log(contacts_arr, 'DELETE');
+                    return [4 /*yield*/, { msg: "User deleted" }];
+                case 5: return [2 /*return*/, _a.sent()];
+                case 6: return [4 /*yield*/, { msg: "User not found" }];
+                case 7: return [2 /*return*/, _a.sent()];
+                case 8: return [2 /*return*/];
+            }
+        });
+    });
+}
 function addContactDB(user, contact) {
     return __awaiter(this, void 0, void 0, function () {
         var contact_id, contacts_arr;

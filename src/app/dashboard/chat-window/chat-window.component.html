@@ -16,7 +16,10 @@
       <form [formGroup]="messageForm" class="form-group"
       (ngSubmit)="onSend()">
         <input class="form-control" id="send-message" formControlName="message" autocomplete="off">
-        <button class="btn btn-primary" type="submit">Send</button>
+        <button class="btn btn-primary"
+        [disabled]="!(!(this.messageForm.invalid)&&(currentUser!=='none'))" type="submit">Send
+          <i class="fas fa-envelope"></i>
+        </button>
     </form>
   </div>
 

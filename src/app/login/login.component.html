@@ -9,7 +9,7 @@
           <span class='alert' *ngIf="show_msg">{{msg}}</span>
           <br>
           <label for="password">Password</label>
-          <input class="form-control" id="password" formControlName="password">
+          <input class="form-control" id="password" formControlName="password" type="password">
           <br>
         <button class="btn btn-primary btn-login btn-lg" type="submit" [disabled]="!projectForm.valid">Login</button>
       </form>

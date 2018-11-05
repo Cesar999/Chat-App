@@ -1,10 +1,16 @@
 <div class="wrapper">
   <div id="contact-list">
-    <h3 class='title-list'>Contact List</h3>
+    <h3 class='title-list'>Contact List <i class="fas fa-user-friends"></i></h3>
 
-    <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" *ngFor="let c of contactlist">
-        <i class="fas fa-user"></i><span>{{c.username}}</span>
-    </button>
+    <div *ngFor="let c of contactlist" class='btns-box'>
+        <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" >
+            <i class="fas fa-user"></i><span>{{c.username}}</span>
+        </button>
+        <button class="btn btn-danger delete-btn" (click)='onDelete(c)'>
+           <i class="fas fa-user-times"></i><span></span>
+        </button>
+    </div>
+
 
   </div>
 
@@ -13,7 +19,9 @@
       <form [formGroup]="contactForm" class="form-group"
       (ngSubmit)="onAdd()">
         <input class="form-control" id="send-message" formControlName="contact">
-        <button class="btn btn-primary" type="submit">Add</button>
+        <button class="btn btn-primary" type="submit">Add
+            <i class="fas fa-user-plus"></i>
+        </button>
     </form>
   </div>
 

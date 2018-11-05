@@ -42,4 +42,9 @@ export class AppService {
 
  // ------------------------------------------------------------------
 
+ deleteContact(data: any) {
+  return this.http.post('http://localhost:3001/delete-contact', data);
+}
+// ------------------
+
 }

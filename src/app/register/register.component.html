@@ -8,10 +8,10 @@
           <span class="alert" *ngIf="invalidUser&&projectForm.get('username').dirty">Username already exists</span>
           <br>
           <label for="password">Password</label>
-          <input class="form-control" id="password" formControlName="password">
+          <input class="form-control" id="password" formControlName="password" type="password">
           <br>
           <label for="password2">Confirm Password</label>
-          <input class="form-control" id="password2" formControlName="password2" (input)="onChange()">
+          <input class="form-control" id="password2" formControlName="password2" (input)="onChange()" type="password">
           <span class="alert" *ngIf="invalidPass&&projectForm.get('password2').dirty">Passwords don't match</span>
           <br>
         <button [disabled]="!projectForm.valid" class="btn btn-primary btn-login btn-lg" type="submit">Register</button>

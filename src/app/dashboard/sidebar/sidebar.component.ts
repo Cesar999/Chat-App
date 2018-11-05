@@ -95,9 +95,17 @@ export class SidebarComponent implements OnInit {
     this.appService.getConversation({_id: c.conv_id}).subscribe(
       (response) => {
         console.log(response);
+        this.dashboardService.listenContact(c);
       }
     );
   }
 
+  onDelete(c) {
+    this.appService.deleteContact({contact: c.username, mainUser: localStorage.getItem('username')}).subscribe(
+      (response) => {
+        console.log(response);
+      }
+    );
+  }
 
 }// END CLASS

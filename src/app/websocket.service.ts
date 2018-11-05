@@ -11,6 +11,9 @@ export class WebsocketService {
   public list = new Subject<any>();
   public list$ = this.list.asObservable();
 
+  public conv = new Subject<any>();
+  public conv$ = this.conv.asObservable();
+
   constructor() {
     this.socket = io('http://localhost:3001');
   }
@@ -20,10 +23,14 @@ export class WebsocketService {
     this.socket.emit('chat message', data);
   }
 
-  listenMsg() {
-    this.socket.on('test', (data) => {
-      console.log(data);
+  listenConv() {
+    this.socket.on('chat conversation', (data) => {
+      this.conv.next(data);
     });
+  }
+
+  getConvListener() {
+    return this.conv$;
   }
 
   // -----------------------

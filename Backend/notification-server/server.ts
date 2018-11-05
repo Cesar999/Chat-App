@@ -221,7 +221,7 @@ io.sockets.on('connection', (socket: ISocket) => {
     socket.on('chat message', async (data) => {
         console.log(data);
         await storeMessage(data);
-        await returnConversation(data._id);
+        await returnConversation(data, socket.nickname);
     });
 
     socket.on('user online', (data: any) => {
@@ -333,7 +333,7 @@ async function storeMessage(data: any) {
     });
 }
 
-function returnConversation(_id: ObjectId) {
-
+function returnConversation(data: any, socket_nickname: any) {
+  users[socket_nickname].emit('chat conversation', data);
 }
 

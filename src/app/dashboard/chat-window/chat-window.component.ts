@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DashboardService } from '../dashboard.service';
 import { WebsocketService } from 'src/app/websocket.service';
@@ -11,7 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.css']
 })
-export class ChatWindowComponent implements OnInit {
+export class ChatWindowComponent implements OnInit, AfterViewChecked {
   messageForm: FormGroup;
   constructor(private dashboardService: DashboardService, private socket: WebsocketService, private appService: AppService,
     private router: Router, private cookieService: CookieService) { }
@@ -22,6 +22,8 @@ export class ChatWindowComponent implements OnInit {
   currentConv: any;
 
   msg_arr: any;
+
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
   ngOnInit() {
     this.mainUser = localStorage.getItem('username');
@@ -38,6 +40,18 @@ export class ChatWindowComponent implements OnInit {
         this.getConversation(res);
       }
     );
+
+    this.socket.getConvListener().subscribe(
+      (res) => {
+        this.getConversation(res);
+      }
+    );
+
+    this.scrollToBottom();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
   }
 
   onSend() {
@@ -55,6 +69,7 @@ export class ChatWindowComponent implements OnInit {
           this.socket.sendMsg(data);
           this.messageForm.reset();
           // this.getConversation(data);
+          this.socket.listenConv();
         } else {
         }
       },
@@ -81,5 +96,11 @@ export class ChatWindowComponent implements OnInit {
       }
     );
   }
+
+  scrollToBottom(): void {
+    try {
+        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
+}
 
 }

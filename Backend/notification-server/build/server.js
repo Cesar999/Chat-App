@@ -262,7 +262,7 @@ io.sockets.on('connection', function (socket) {
                     return [4 /*yield*/, storeMessage(data)];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, returnConversation(data._id)];
+                    return [4 /*yield*/, returnConversation(data, socket.nickname)];
                 case 2:
                     _a.sent();
                     return [2 /*return*/];
@@ -429,5 +429,6 @@ function storeMessage(data) {
         });
     });
 }
-function returnConversation(_id) {
+function returnConversation(data, socket_nickname) {
+    users[socket_nickname].emit('chat conversation', data);
 }

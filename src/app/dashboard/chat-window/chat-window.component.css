@@ -9,6 +9,7 @@
   border: 2px solid orange;
   margin: 1%;
   flex: 1;
+  overflow: scroll;
 }
 
 #message-bar{

@@ -4,7 +4,7 @@
     <hr>
     <p>{{test}}</p>
     <hr>
-    <div *ngFor="let m of msg_arr">{{m}}</div>
+    <div *ngFor="let m of msg_arr">{{m.author.username}}: {{m.content}}</div>
   </div>
 
   <div id="message-bar">

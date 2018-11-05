@@ -43,7 +43,7 @@ export class ChatWindowComponent implements OnInit {
   onSend() {
     // this.test = JSON.stringify(this.dashboardService.getList());
     this.appService.checkAuth().subscribe(
-      (response) => {
+     (response) => {
         if (response['authorization'] === true ) {
           const data = {
             msg: this.messageForm.value.message,
@@ -54,7 +54,7 @@ export class ChatWindowComponent implements OnInit {
           // console.log(data);
           this.socket.sendMsg(data);
           this.messageForm.reset();
-          this.getConversation(data);
+          // this.getConversation(data);
         } else {
         }
       },

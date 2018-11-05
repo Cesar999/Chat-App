@@ -180,6 +180,14 @@ app.post('/conversation-id', function (req, res) {
     console.log(req.body);
     var conv_id = req.body;
     Conversation.findById(conv_id)
+        .populate({
+        path: 'messages',
+        select: 'content author _id',
+        populate: {
+            path: 'author',
+            model: 'User'
+        }
+    })
         .then(function (c) {
         res.send(c);
     });

@@ -1,16 +1,21 @@
 <div class="wrapper">
   <div #scrollMe id="message-chat">
-    <p>currentConv</p>
+    <h3 class='sticky'>
+      <span class='main-user'>{{mainUser}}</span> to
+      <span class='contact'>{{currentUser}}</span>
+    </h3>
     <hr>
-    <p>{{test}}</p>
-    <hr>
-    <div *ngFor="let m of msg_arr">{{m.author.username}}: {{m.content}}</div>
+    <div *ngFor="let m of msg_arr"
+    [ngClass]="m.author.username === mainUser ? 'main-user message' : 'contact message'">
+      <span class='author'>{{m.author.username}}: </span>
+      <span class='content'>{{m.content}}</span>
+    </div>
   </div>
 
   <div id="message-bar">
       <form [formGroup]="messageForm" class="form-group"
       (ngSubmit)="onSend()">
-        <input class="form-control" id="send-message" formControlName="message">
+        <input class="form-control" id="send-message" formControlName="message" autocomplete="off">
         <button class="btn btn-primary" type="submit">Send</button>
     </form>
   </div>

@@ -335,5 +335,6 @@ async function storeMessage(data: any) {
 
 function returnConversation(data: any, socket_nickname: any) {
   users[socket_nickname].emit('chat conversation', data);
+  users[data.to].emit('chat conversation', data);
 }
 

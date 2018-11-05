@@ -1,6 +1,6 @@
 <div class="wrapper">
   <div id="contact-list">
-    <p>Contact List</p>
+    <h3 class='title-list'>Contact List</h3>
 
     <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" *ngFor="let c of contactlist">
         <i class="fas fa-user"></i><span>{{c.username}}</span>

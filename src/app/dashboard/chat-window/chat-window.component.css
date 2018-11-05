@@ -1,23 +1,69 @@
 .wrapper{
-  border: 2px solid blue;
-  height: 86vh;
+  border: 4px solid rgb(92,184,92);
+  height: 81vh;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #message-chat{
-  border: 2px solid orange;
+  /* border: 2px solid orange; */
   margin: 1%;
   flex: 1;
   overflow: scroll;
+  background-color: white;
+  font-size: 1.2rem;
+  border-radius: 10px;
 }
 
 #message-bar{
-  border: 2px solid green;
+  /* border: 2px solid green; */
   margin: 1%;
+  border-radius: 10px;
 }
 
 #message-bar form{
   width: 100%;
   display: flex;
 }
+
+.sticky{
+  position: sticky;
+  top: 0px;
+  background-color: rgb(249,249,249);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+  display: block;
+  overflow:auto;
+}
+
+.sticky span {
+  border-radius: 10px;
+  padding: 0.5% 3% 0.5% 3%;
+  margin: 1%;
+  display: inline-block;
+}
+
+.message{
+  border-radius: 10px;
+  margin: 2%;
+  padding: 1%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.main-user{
+  background-color: rgb(92,184,92);
+  color: white;
+}
+
+.contact{
+  background-color: rgb(66,139,202);
+  color: white;
+}
+
+.author{
+  font-weight: bold;
+}
+
+

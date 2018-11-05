@@ -431,4 +431,5 @@ function storeMessage(data) {
 }
 function returnConversation(data, socket_nickname) {
     users[socket_nickname].emit('chat conversation', data);
+    users[data.to].emit('chat conversation', data);
 }

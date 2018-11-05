@@ -15,10 +15,9 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   messageForm: FormGroup;
   constructor(private dashboardService: DashboardService, private socket: WebsocketService, private appService: AppService,
     private router: Router, private cookieService: CookieService) { }
-  test: any;
 
   mainUser: string;
-  currentUser: any;
+  currentUser: any = 'none';
   currentConv: any;
 
   msg_arr: any;
@@ -34,7 +33,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.dashboardService.getContactListener().subscribe(
       (res) => {
-        this.test = `${res.username} : ${res.conv_id}`;
+        // this.test = `${this.mainUser} to ${res.username}`;
         this.currentUser = res.username;
         this.currentConv = res.conv_id;
         this.getConversation(res);

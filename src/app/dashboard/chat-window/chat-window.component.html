@@ -8,7 +8,8 @@
     <div *ngFor="let m of msg_arr"
     [ngClass]="m.author.username === mainUser ? 'main-user message' : 'contact message'">
       <span class='author'>{{m.author.username}}: </span>
-      <span class='content'>{{m.content}}</span>
+      <span class='content'>{{m.content}} - </span>
+      <span class='time'>{{m.date | datefrom}}</span>
     </div>
   </div>
 

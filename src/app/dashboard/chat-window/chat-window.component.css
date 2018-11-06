@@ -66,4 +66,9 @@
   font-weight: bold;
 }
 
-
+.time{
+  color: rgb(249,249,249);
+  font-size: 0.9rem;
+  text-shadow: 2px 2px 8px rgb(68, 68, 68);
+  font-style: italic;
+}

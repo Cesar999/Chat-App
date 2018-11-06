@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { AppService } from 'src/app/app.service';
 import { CookieService } from 'ngx-cookie-service';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
@@ -62,7 +64,8 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
             msg: this.messageForm.value.message,
             conv_id: this.currentConv,
             author: this.mainUser,
-            to: this.currentUser
+            to: this.currentUser,
+            date: moment().format()
           };
           // console.log(data);
           this.socket.sendMsg(data);

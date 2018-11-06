@@ -30,7 +30,8 @@ const messageSchema = new Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-      }
+      },
+    date: {type: String}
 });
 
 const conversationSchema = new Schema({
@@ -160,9 +161,10 @@ app.post('/conversation-id', function(req, res) {
     Conversation.findById(conv_id)
     .populate({
       path: 'messages',
-      select: 'content author _id',
+      select: 'content author _id date',
       populate: {
         path: 'author',
+        select: 'username',
         model: 'User'
       }
   })
@@ -173,7 +175,7 @@ app.post('/conversation-id', function(req, res) {
 
 // -------------------------------------------------
 
-async function deleteContact(contact, mainUser) {
+async function deleteContact(contact: any, mainUser: any) {
   const contact_id = await User.findOne(contact)
   .then((c) => {
       if (c) {
@@ -363,7 +365,8 @@ async function storeMessage(data: any) {
     const msg = new Message({
         content: data.msg,
         conversation: data.conv_id,
-        author: user._id
+        author: user._id,
+        date: data.date
     });
     const message = await msg.save();
 

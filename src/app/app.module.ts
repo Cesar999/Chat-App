@@ -20,6 +20,7 @@ import { JwtHelperService,  JwtModule } from '@auth0/angular-jwt';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import { CookieService } from 'ngx-cookie-service';
+import { DatePipe } from './date.pipe';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
@@ -36,7 +37,8 @@ const appRoutes: Routes = [
     LoginComponent,
     DashboardComponent,
     ChatWindowComponent,
-    SidebarComponent
+    SidebarComponent,
+    DatePipe
   ],
   imports: [
     BrowserModule,

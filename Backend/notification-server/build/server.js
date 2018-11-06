@@ -85,7 +85,8 @@ var messageSchema = new Schema({
     author: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    date: { type: String }
 });
 var conversationSchema = new Schema({
     participants: [{
@@ -211,9 +212,10 @@ app.post('/conversation-id', function (req, res) {
     Conversation.findById(conv_id)
         .populate({
         path: 'messages',
-        select: 'content author _id',
+        select: 'content author _id date',
         populate: {
             path: 'author',
+            select: 'username',
             model: 'User'
         }
     })
@@ -485,7 +487,8 @@ function storeMessage(data) {
                     msg = new Message({
                         content: data.msg,
                         conversation: data.conv_id,
-                        author: user._id
+                        author: user._id,
+                        date: data.date
                     });
                     return [4 /*yield*/, msg.save()];
                 case 2:

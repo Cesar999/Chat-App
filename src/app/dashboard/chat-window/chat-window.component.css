@@ -50,16 +50,19 @@
   margin: 2%;
   padding: 1%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+  display: table;
 }
 
 .main-user{
   background-color: rgb(92,184,92);
   color: white;
+  margin-right: auto;
 }
 
 .contact{
   background-color: rgb(66,139,202);
   color: white;
+  margin-left: auto;
 }
 
 .author{

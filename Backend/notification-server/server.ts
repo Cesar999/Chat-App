@@ -197,19 +197,6 @@ app.post('/get-rooms', async function(req, res) {
     await res.send(rooms);
 });
 
-app.post('/invite-room', async function(req, res) {
-    // console.log(req.body);
-    const user = await User.findOne({username: req.body.invite});
-    await Conversation.findById({_id: req.body.toRoom})
-    .then((c: any) => {
-    if (c.participants.indexOf(user._id) === -1) {
-        c.participants.push(user._id);
-        c.save();
-        res.send({msg: 'User has been invited'});
-    }
-    });
-});
-
 interface Document {
   [prop: string]: any;
   participants?: mongoose.Types.ObjectId[];
@@ -358,6 +345,20 @@ io.sockets.on('connection', (socket: ISocket) => {
         delete users[socket.nickname];
         updateFriendContact(socket.nickname);
     });
+
+    socket.on('on-invite', async (data) => {
+      console.log(data);
+      const user = await User.findOne({username: data.invite});
+      await Conversation.findById({_id: data.toRoom})
+      .then((c: any) => {
+      if (c.participants.indexOf(user._id) === -1) {
+        c.participants.push(user._id);
+        c.save();
+        users[data.invite].emit('listen invited', {msg: 'invited'});
+        console.log(data.invite);
+    }
+    });
+   });
 
 });
 // -------------END SOCKETS------------------

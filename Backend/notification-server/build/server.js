@@ -256,29 +256,6 @@ app.post('/get-rooms', function (req, res) {
         });
     });
 });
-app.post('/invite-room', function (req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var user;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, User.findOne({ username: req.body.invite })];
-                case 1:
-                    user = _a.sent();
-                    return [4 /*yield*/, Conversation.findById({ _id: req.body.toRoom })
-                            .then(function (c) {
-                            if (c.participants.indexOf(user._id) === -1) {
-                                c.participants.push(user._id);
-                                c.save();
-                                res.send({ msg: 'User has been invited' });
-                            }
-                        })];
-                case 2:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-});
 app.post('/leave-room', function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var conv, user, index;
@@ -459,6 +436,30 @@ io.sockets.on('connection', function (socket) {
         delete users[socket.nickname];
         updateFriendContact(socket.nickname);
     });
+    socket.on('on-invite', function (data) { return __awaiter(_this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(data);
+                    return [4 /*yield*/, User.findOne({ username: data.invite })];
+                case 1:
+                    user = _a.sent();
+                    return [4 /*yield*/, Conversation.findById({ _id: data.toRoom })
+                            .then(function (c) {
+                            if (c.participants.indexOf(user._id) === -1) {
+                                c.participants.push(user._id);
+                                c.save();
+                                users[data.invite].emit('listen invited', { msg: 'invited' });
+                                console.log(data.invite);
+                            }
+                        })];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
 // -------------END SOCKETS------------------
 function emitContacts(socket_nickname) {

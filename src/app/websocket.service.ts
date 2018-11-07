@@ -14,6 +14,9 @@ export class WebsocketService {
   public conv = new Subject<any>();
   public conv$ = this.conv.asObservable();
 
+  public invited = new Subject<any>();
+  public invited$ = this.invited.asObservable();
+
   constructor() {
     this.socket = io('http://localhost:3001');
   }
@@ -54,5 +57,19 @@ export class WebsocketService {
     this.socket.emit('force disconnect');
   }
 
+// -------
+  onInvite(data) {
+  this.socket.emit('on-invite', data);
+  }
+
+  listenInvited() {
+    this.socket.on('listen invited', (data) => {
+      this.invited.next(data);
+    });
+  }
+
+  getInvitedListener() {
+    return this.invited$;
+  }
 
 }

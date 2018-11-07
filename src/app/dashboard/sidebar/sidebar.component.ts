@@ -46,6 +46,19 @@ export class SidebarComponent implements OnInit {
       this.contactlist = data;
       this.dashboardService.setList(data);
     });
+
+    this.socket.getInvitedListener().subscribe(data => {
+        // console.log(data, 'SIDEBAR');
+        this.appService.getRooms({username: localStorage.getItem('username')}).subscribe(
+          (res) => {
+          //  console.log(response);
+            this.list_rooms = res;
+          }
+        );
+    });
+
+    this.socket.listenInvited();
+
   }
 
   logOut() {
@@ -184,12 +197,8 @@ onInviteRoom() {
       this.appService.checkAuth().subscribe(
       (response) => {
         if (response['authorization'] === true ) {
-          this.appService.inviteToRoom(this.inviteForm.value)
-          .subscribe(
-            (res) => {
-             console.log(res);
-            }
-          );
+          this.socket.onInvite(this.inviteForm.value);
+          this.inviteForm.reset();
         } else {
         }
       },

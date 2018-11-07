@@ -36,7 +36,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     this.dashboardService.getContactListener().subscribe(
       (res) => {
         this.socket.listenConv();
-        // console.log(res);
+         console.log(res);
         // this.test = `${this.mainUser} to ${res.username}`;
         if (res.hasOwnProperty('room')) {
           this.currentUser = res.room;
@@ -53,7 +53,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.socket.getConvListener().subscribe(
       (res) => {
-        // console.log(res);
+         console.log(res);
         if (res.to === null) {
           if (res.currentUser === this.currentUser) {
             this.getConversation(res);

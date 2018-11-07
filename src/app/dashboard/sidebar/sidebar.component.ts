@@ -154,8 +154,14 @@ export class SidebarComponent implements OnInit {
         if (response['authorization'] === true ) {
           console.log(this.roomForm.value);
           this.appService.createRoom({username: localStorage.getItem('username'), room: this.roomForm.value.room}).subscribe(
-            () => {
-            // console.log(response);
+            (response2) => {
+             console.log(response2);
+             this.appService.getRooms({username: localStorage.getItem('username')}).subscribe(
+              (res) => {
+              //  console.log(response);
+                this.list_rooms = res;
+                }
+              );
               this.roomForm.reset();
             }
           );

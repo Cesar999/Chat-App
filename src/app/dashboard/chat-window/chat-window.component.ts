@@ -36,9 +36,17 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     this.dashboardService.getContactListener().subscribe(
       (res) => {
         // this.test = `${this.mainUser} to ${res.username}`;
-        this.currentUser = res.username;
-        this.currentConv = res.conv_id;
-        this.getConversation(res);
+        if(res.hasOwnProperty('room')) {
+          this.currentUser = res.room;
+          const obj = {...res, conv_id: res._id};
+          this.currentConv = obj.conv_id;
+          this.getConversation(obj);
+        }
+        else{
+          this.currentUser = res.username;
+          this.currentConv = res.conv_id;
+          this.getConversation(res);
+        }
       }
     );
 
@@ -64,14 +72,20 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
             msg: this.messageForm.value.message,
             conv_id: this.currentConv,
             author: this.mainUser,
-            to: this.currentUser,
+            to: null,
             date: moment().format()
           };
-          // console.log(data);
-          this.socket.sendMsg(data);
-          this.messageForm.reset();
-          // this.getConversation(data);
-          this.socket.listenConv();
+            if(localStorage.getItem('flag')==='Rooms' ){
+              data.to = this.currentUser;
+              this.socket.sendMsg(data);
+              this.messageForm.reset();
+              this.socket.listenConv();
+            }
+            else{
+              this.socket.sendMsg(data);
+              this.messageForm.reset();
+              this.socket.listenConv();
+            }
         } else {
         }
       },
@@ -94,6 +108,15 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     this.appService.getConversation({_id: c.conv_id}).subscribe(
       (response: any) => {
         console.log(response);
+        if(response.room!==null){
+          this.currentUser = response.room;
+        } else {
+          for(let p of response.participants){
+            if(p.username !== this.mainUser){
+               this.currentUser = p.username;
+            }
+          }
+        }
         this.msg_arr = response.messages;
       }
     );
@@ -103,6 +126,6 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     try {
         this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
     } catch (err) { }
-}
+  }
 
 }

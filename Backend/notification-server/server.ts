@@ -43,6 +43,7 @@ const conversationSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
       }],
+      room: {type: String}
 });
 
 interface IUser extends mongoose.Document {
@@ -161,17 +162,65 @@ app.post('/conversation-id', function(req, res) {
     Conversation.findById(conv_id)
     .populate({
       path: 'messages',
-      select: 'content author _id date',
+      select: 'content author _id date room',
       populate: {
         path: 'author',
         select: 'username',
         model: 'User'
       }
-  })
+    })
+    .populate({      
+      path: 'participants',
+      select: 'username'})
     .then((c) => {
         res.send(c);
     });
 });
+
+//-------------------------------------------------
+
+app.post('/create-room', function(req, res) {
+    console.log(req.body);
+    User.findOne({username: req.body.username})
+    .then((u)=>{
+        createRoomConversation(u._id, req.body.room);
+    })
+    .then(()=>{
+        res.send({msg:'Room created'});
+    })
+    .catch((e)=>console.log(e))
+});
+
+app.post('/get-rooms', async function(req, res) {
+    console.log(req.body);
+    const rooms = await findUserRooms(req.body);
+    await res.send(rooms);
+});
+
+app.post('/invite-room', async function(req, res) {
+    console.log(req.body);
+    const user = await User.findOne({username: req.body.invite});
+    await Conversation.findById({_id: req.body.toRoom})
+    .then((c: any) => {
+    if(c.participants.indexOf(user._id)===-1){
+        c.participants.push(user._id);
+        c.save();
+        res.send({msg: 'User has been invited'});
+    }
+    });
+});
+
+app.post('/leave-room',async function(req, res) {
+    console.log(req.body);
+    const conv = await Conversation.findById({_id: req.body.conv_id});
+    const user = await User.findOne({username: req.body.username});
+    const index = conv.participants.indexOf(user._id);
+    conv.participants.splice(index, 1);
+    console.log(conv.participants);
+    await Conversation.findOneAndUpdate({_id: req.body.conv_id}, { $set: {'participants': conv.participants}});
+    await res.send({msg: 'left room'});
+});
+
 
 // -------------------------------------------------
 
@@ -179,7 +228,7 @@ async function deleteContact(contact: any, mainUser: any) {
   const contact_id = await User.findOne(contact)
   .then((c) => {
       if (c) {
-          console.log(c._id, 'DELETE');
+         // console.log(c._id, 'DELETE');
           return c._id;
       }
   });
@@ -187,7 +236,7 @@ async function deleteContact(contact: any, mainUser: any) {
 const contacts_arr = await User.findOne(mainUser)
   .then((u) => {
       if (u) {
-          console.log(u.contacts, 'DELETE');
+        //  console.log(u.contacts, 'DELETE');
           return u.contacts;
       }
   });
@@ -197,7 +246,7 @@ const contacts_arr = await User.findOne(mainUser)
         const index = contacts_arr.indexOf(contact_id);
         await contacts_arr.splice(index, 1);
         await User.findOneAndUpdate(mainUser, { $set: {'contacts': contacts_arr}}).then(c => console.log(c));
-        console.log(contacts_arr, 'DELETE');
+       // console.log(contacts_arr, 'DELETE');
         return await {msg: `User deleted`};
     } else {
         return await {msg: `User not found`};
@@ -206,12 +255,12 @@ const contacts_arr = await User.findOne(mainUser)
 }
 
 async function addContactDB(user: any, contact: any) {
-    console.log(user, contact);
+   // console.log(user, contact);
 
     const contact_id = await User.findOne(contact)
         .then((c) => {
             if (c) {
-                console.log(c._id);
+              //  console.log(c._id);
                 return c._id;
             }
         });
@@ -219,7 +268,7 @@ async function addContactDB(user: any, contact: any) {
     const contacts_arr = await User.findOne(user)
         .then((u) => {
             if (u) {
-                console.log(u.contacts);
+              //  console.log(u.contacts);
                 return u.contacts;
             }
         });
@@ -228,7 +277,7 @@ async function addContactDB(user: any, contact: any) {
         if (contacts_arr.indexOf(contact_id) === -1) {
             await contacts_arr.push(contact_id);
             await User.findOneAndUpdate(user, { $set: {'contacts': contacts_arr}}).then(c => console.log(c));
-            console.log(contacts_arr);
+           // console.log(contacts_arr);
             return await {msg: `User saved`, _id: contact_id};
         } else {
             return await {msg: `User already added`};
@@ -242,10 +291,23 @@ function createConversation(user1_id: mongoose.Types.ObjectId, user2_id: mongoos
     const conv = new Conversation({
         participants: [user1_id, user2_id],
             messages: [],
+            room: null
     });
     conv.save()
     .then((c) => {
-        console.log('Conversation ', c);
+       // console.log('Conversation ', c);
+    });
+}
+
+function createRoomConversation(user1_id: mongoose.Types.ObjectId, room: String) {
+    const conv = new Conversation({
+        participants: [user1_id],
+            messages: [],
+            room: room
+    });
+    conv.save()
+    .then((c) => {
+       // console.log('Conversation ', c);
     });
 }
 
@@ -262,7 +324,7 @@ const io = socket(server);
 io.sockets.on('connection', (socket: ISocket) => {
 
     socket.on('chat message', async (data) => {
-        console.log(data);
+       // console.log(data);
         await storeMessage(data);
         await returnConversation(data, socket.nickname);
     });
@@ -271,14 +333,14 @@ io.sockets.on('connection', (socket: ISocket) => {
         if (data.username !== undefined) {
             socket.nickname = data.username;
             users[socket.nickname] = socket;
-            console.log(socket.nickname, Object.keys(users));
+           // console.log(socket.nickname, Object.keys(users));
             emitContacts(socket.nickname);
             updateFriendContact(socket.nickname);
         }
     });
 
     socket.on('force disconnect', () => {
-        console.log(socket.nickname);
+       // console.log(socket.nickname);
         delete users[socket.nickname];
         updateFriendContact(socket.nickname);
     });
@@ -287,7 +349,7 @@ io.sockets.on('connection', (socket: ISocket) => {
         if (!socket.nickname) {
             return;
         }
-        console.log(socket.nickname);
+       // console.log(socket.nickname);
         delete users[socket.nickname];
         updateFriendContact(socket.nickname);
     });
@@ -328,7 +390,7 @@ async function populateContacts(data_username: string) {
                     online = false;
                 }
                 obj = {...c._doc, online, conv_id};
-                console.log(obj);
+               // console.log(obj);
                 list.push(obj);
             }
             return list;
@@ -352,9 +414,9 @@ function updateFriendContact(nickname: string) {
 }
 
 async function getConversationId(user_id: any, contact_id: any) {
-    const conv_id = await Conversation.findOne({participants: {$all: [user_id, contact_id]}})
+    const conv_id = await Conversation.findOne({participants: {$all: [user_id, contact_id]}, room: null})
     .then((c) => {
-        console.log(c, 'fail');
+       // console.log(c, 'fail');
         return c._id;
     });
     return await conv_id;
@@ -379,6 +441,34 @@ async function storeMessage(data: any) {
 
 function returnConversation(data: any, socket_nickname: any) {
   users[socket_nickname].emit('chat conversation', data);
-  users[data.to].emit('chat conversation', data);
+  if(data.to!==null){
+    users[data.to].emit('chat conversation', data);
+  }
+  else{
+     Conversation.findById({_id: data.conv_id})
+     .populate({
+        path: 'participants',
+        select: 'username _id'
+     })
+     .then((c)=>{
+         for (let u of c.participants){
+             users[u.username].emit('chat conversation', data);
+         }
+     })
+  }
 }
+
+async function findUserRooms(user){
+    let temp_arr = [];
+    const user_id = await User.findOne(user);
+    
+    const rooms = await Conversation.find({room: { $ne: null }, participants: { $in: [user_id._id] }})
+    .populate({
+      path: 'participants',
+      select: 'username',
+    });
+
+    return await rooms;
+}
+
 

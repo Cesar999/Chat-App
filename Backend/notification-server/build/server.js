@@ -97,6 +97,7 @@ var conversationSchema = new Schema({
             type: mongoose_1.default.Schema.Types.ObjectId,
             ref: 'Message'
         }],
+    room: { type: String }
 });
 var User = mongoose_1.default.model('User', userSchema, 'User');
 var Message = mongoose_1.default.model('Message', messageSchema, 'Message');
@@ -212,15 +213,101 @@ app.post('/conversation-id', function (req, res) {
     Conversation.findById(conv_id)
         .populate({
         path: 'messages',
-        select: 'content author _id date',
+        select: 'content author _id date room',
         populate: {
             path: 'author',
             select: 'username',
             model: 'User'
         }
     })
+        .populate({
+        path: 'participants',
+        select: 'username'
+    })
         .then(function (c) {
         res.send(c);
+    });
+});
+//-------------------------------------------------
+app.post('/create-room', function (req, res) {
+    console.log(req.body);
+    User.findOne({ username: req.body.username })
+        .then(function (u) {
+        createRoomConversation(u._id, req.body.room);
+    })
+        .then(function () {
+        res.send({ msg: 'Room created' });
+    })
+        .catch(function (e) { return console.log(e); });
+});
+app.post('/get-rooms', function (req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var rooms;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(req.body);
+                    return [4 /*yield*/, findUserRooms(req.body)];
+                case 1:
+                    rooms = _a.sent();
+                    return [4 /*yield*/, res.send(rooms)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+});
+app.post('/invite-room', function (req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(req.body);
+                    return [4 /*yield*/, User.findOne({ username: req.body.invite })];
+                case 1:
+                    user = _a.sent();
+                    return [4 /*yield*/, Conversation.findById({ _id: req.body.toRoom })
+                            .then(function (c) {
+                            if (c.participants.indexOf(user._id) === -1) {
+                                c.participants.push(user._id);
+                                c.save();
+                                res.send({ msg: 'User has been invited' });
+                            }
+                        })];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+});
+app.post('/leave-room', function (req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var conv, user, index;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(req.body);
+                    return [4 /*yield*/, Conversation.findById({ _id: req.body.conv_id })];
+                case 1:
+                    conv = _a.sent();
+                    return [4 /*yield*/, User.findOne({ username: req.body.username })];
+                case 2:
+                    user = _a.sent();
+                    index = conv.participants.indexOf(user._id);
+                    conv.participants.splice(index, 1);
+                    console.log(conv.participants);
+                    return [4 /*yield*/, Conversation.findOneAndUpdate({ _id: req.body.conv_id }, { $set: { 'participants': conv.participants } })];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, res.send({ msg: 'left room' })];
+                case 4:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
     });
 });
 // -------------------------------------------------
@@ -232,7 +319,7 @@ function deleteContact(contact, mainUser) {
                 case 0: return [4 /*yield*/, User.findOne(contact)
                         .then(function (c) {
                         if (c) {
-                            console.log(c._id, 'DELETE');
+                            // console.log(c._id, 'DELETE');
                             return c._id;
                         }
                     })];
@@ -241,7 +328,7 @@ function deleteContact(contact, mainUser) {
                     return [4 /*yield*/, User.findOne(mainUser)
                             .then(function (u) {
                             if (u) {
-                                console.log(u.contacts, 'DELETE');
+                                //  console.log(u.contacts, 'DELETE');
                                 return u.contacts;
                             }
                         })];
@@ -256,9 +343,10 @@ function deleteContact(contact, mainUser) {
                     return [4 /*yield*/, User.findOneAndUpdate(mainUser, { $set: { 'contacts': contacts_arr } }).then(function (c) { return console.log(c); })];
                 case 4:
                     _a.sent();
-                    console.log(contacts_arr, 'DELETE');
                     return [4 /*yield*/, { msg: "User deleted" }];
-                case 5: return [2 /*return*/, _a.sent()];
+                case 5: 
+                // console.log(contacts_arr, 'DELETE');
+                return [2 /*return*/, _a.sent()];
                 case 6: return [4 /*yield*/, { msg: "User not found" }];
                 case 7: return [2 /*return*/, _a.sent()];
                 case 8: return [2 /*return*/];
@@ -271,21 +359,19 @@ function addContactDB(user, contact) {
         var contact_id, contacts_arr;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log(user, contact);
-                    return [4 /*yield*/, User.findOne(contact)
-                            .then(function (c) {
-                            if (c) {
-                                console.log(c._id);
-                                return c._id;
-                            }
-                        })];
+                case 0: return [4 /*yield*/, User.findOne(contact)
+                        .then(function (c) {
+                        if (c) {
+                            //  console.log(c._id);
+                            return c._id;
+                        }
+                    })];
                 case 1:
                     contact_id = _a.sent();
                     return [4 /*yield*/, User.findOne(user)
                             .then(function (u) {
                             if (u) {
-                                console.log(u.contacts);
+                                //  console.log(u.contacts);
                                 return u.contacts;
                             }
                         })];
@@ -299,9 +385,10 @@ function addContactDB(user, contact) {
                     return [4 /*yield*/, User.findOneAndUpdate(user, { $set: { 'contacts': contacts_arr } }).then(function (c) { return console.log(c); })];
                 case 4:
                     _a.sent();
-                    console.log(contacts_arr);
                     return [4 /*yield*/, { msg: "User saved", _id: contact_id }];
-                case 5: return [2 /*return*/, _a.sent()];
+                case 5: 
+                // console.log(contacts_arr);
+                return [2 /*return*/, _a.sent()];
                 case 6: return [4 /*yield*/, { msg: "User already added" }];
                 case 7: return [2 /*return*/, _a.sent()];
                 case 8: return [3 /*break*/, 11];
@@ -316,10 +403,22 @@ function createConversation(user1_id, user2_id) {
     var conv = new Conversation({
         participants: [user1_id, user2_id],
         messages: [],
+        room: null
     });
     conv.save()
         .then(function (c) {
-        console.log('Conversation ', c);
+        // console.log('Conversation ', c);
+    });
+}
+function createRoomConversation(user1_id, room) {
+    var conv = new Conversation({
+        participants: [user1_id],
+        messages: [],
+        room: room
+    });
+    conv.save()
+        .then(function (c) {
+        // console.log('Conversation ', c);
     });
 }
 var users = {};
@@ -330,10 +429,11 @@ io.sockets.on('connection', function (socket) {
     socket.on('chat message', function (data) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log(data);
-                    return [4 /*yield*/, storeMessage(data)];
+                case 0: 
+                // console.log(data);
+                return [4 /*yield*/, storeMessage(data)];
                 case 1:
+                    // console.log(data);
                     _a.sent();
                     return [4 /*yield*/, returnConversation(data, socket.nickname)];
                 case 2:
@@ -346,13 +446,13 @@ io.sockets.on('connection', function (socket) {
         if (data.username !== undefined) {
             socket.nickname = data.username;
             users[socket.nickname] = socket;
-            console.log(socket.nickname, Object.keys(users));
+            // console.log(socket.nickname, Object.keys(users));
             emitContacts(socket.nickname);
             updateFriendContact(socket.nickname);
         }
     });
     socket.on('force disconnect', function () {
-        console.log(socket.nickname);
+        // console.log(socket.nickname);
         delete users[socket.nickname];
         updateFriendContact(socket.nickname);
     });
@@ -360,7 +460,7 @@ io.sockets.on('connection', function (socket) {
         if (!socket.nickname) {
             return;
         }
-        console.log(socket.nickname);
+        // console.log(socket.nickname);
         delete users[socket.nickname];
         updateFriendContact(socket.nickname);
     });
@@ -426,7 +526,7 @@ function populateContacts(data_username) {
                                             online = false;
                                         }
                                         obj = __assign({}, c._doc, { online: online, conv_id: conv_id });
-                                        console.log(obj);
+                                        // console.log(obj);
                                         list.push(obj);
                                         _b.label = 3;
                                     case 3:
@@ -463,9 +563,9 @@ function getConversationId(user_id, contact_id) {
         var conv_id;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, Conversation.findOne({ participants: { $all: [user_id, contact_id] } })
+                case 0: return [4 /*yield*/, Conversation.findOne({ participants: { $all: [user_id, contact_id] }, room: null })
                         .then(function (c) {
-                        console.log(c, 'fail');
+                        // console.log(c, 'fail');
                         return c._id;
                     })];
                 case 1:
@@ -505,5 +605,43 @@ function storeMessage(data) {
 }
 function returnConversation(data, socket_nickname) {
     users[socket_nickname].emit('chat conversation', data);
-    users[data.to].emit('chat conversation', data);
+    if (data.to !== null) {
+        users[data.to].emit('chat conversation', data);
+    }
+    else {
+        Conversation.findById({ _id: data.conv_id })
+            .populate({
+            path: 'participants',
+            select: 'username _id'
+        })
+            .then(function (c) {
+            for (var _i = 0, _a = c.participants; _i < _a.length; _i++) {
+                var u = _a[_i];
+                users[u.username].emit('chat conversation', data);
+            }
+        });
+    }
+}
+function findUserRooms(user) {
+    return __awaiter(this, void 0, void 0, function () {
+        var temp_arr, user_id, rooms;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    temp_arr = [];
+                    return [4 /*yield*/, User.findOne(user)];
+                case 1:
+                    user_id = _a.sent();
+                    return [4 /*yield*/, Conversation.find({ room: { $ne: null }, participants: { $in: [user_id._id] } })
+                            .populate({
+                            path: 'participants',
+                            select: 'username',
+                        })];
+                case 2:
+                    rooms = _a.sent();
+                    return [4 /*yield*/, rooms];
+                case 3: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
 }

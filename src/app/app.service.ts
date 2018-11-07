@@ -45,6 +45,21 @@ export class AppService {
  deleteContact(data: any) {
   return this.http.post('http://localhost:3001/delete-contact', data);
 }
-// ------------------
+// ----------------------------------------------------------
+ createRoom(data: any) {
+  return this.http.post('http://localhost:3001/create-room', data);
+}
+
+ getRooms(data: any) {
+  return this.http.post('http://localhost:3001/get-rooms', data);
+}
+
+ inviteToRoom(data: any) {
+  return this.http.post('http://localhost:3001/invite-room', data);
+}
+
+ leaveRoom(data: any) {
+  return this.http.post('http://localhost:3001/leave-room', data);
+}
 
 }

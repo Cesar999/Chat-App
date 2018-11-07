@@ -1,20 +1,7 @@
-<div class="wrapper">
-  <div id="contact-list">
-    <h3 class='title-list'>Contact List <i class="fas fa-user-friends"></i></h3>
+<div class="wrapper" >
+<button class='btn btn-info btn-rooms' (click)='toggleRooms()'>{{tag_btn}}</button>
 
-    <div *ngFor="let c of contactlist" class='btns-box'>
-        <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" >
-            <i class="fas fa-user"></i><span>{{c.username}}</span>
-        </button>
-        <button class="btn btn-danger delete-btn" (click)='onDelete(c)'>
-           <i class="fas fa-user-times"></i><span></span>
-        </button>
-    </div>
-
-
-  </div>
-
-  <div id="addContact-bar">
+  <div *ngIf="roomFlag"  id="addContact-bar">
       <span *ngIf="show_msg">{{msg}}</span>
       <form [formGroup]="contactForm" class="form-group"
       (ngSubmit)="onAdd()">
@@ -24,5 +11,58 @@
         </button>
     </form>
   </div>
+
+    <div *ngIf="roomFlag" id="contact-list" >
+    <h3 class='title-list'>Contacts <i class="fas fa-user-friends"></i></h3>
+
+    <div *ngFor="let c of contactlist" class='btns-box'>
+        <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" >
+            <i class="fas fa-user"></i><span>{{c.username}}</span>
+        </button>
+        <button class="btn btn-danger delete-btn" (click)='onDelete(c)'>
+           <i class="fas fa-user-times"></i><span></span>
+        </button>
+    </div>
+  </div>
+
+  <!-- Room flag false -->
+    <div *ngIf="!roomFlag"  id="addContact-bar">
+        <form [formGroup]="roomForm" class="form-group"
+            (ngSubmit)="onAddRoom()">
+        <input class="form-control" id="new-room" formControlName="room">
+        <button class="btn btn-primary" type="submit">New
+            <i class="fas fa-plus-circle"></i>
+        </button>
+        </form>
+    </div>
+
+    <div *ngIf="!roomFlag"  id="addContact-bar">
+        <form [formGroup]="inviteForm" class="form-group"
+            (ngSubmit)="onInviteRoom()">
+        <select class="form-control" formControlName="toRoom">
+            <option *ngFor="let s of list_rooms" [value]="s._id">{{s.room}}</option>
+        </select>    
+        <select class="form-control" formControlName="invite">
+            <option *ngFor="let c of contactlist" [value]="c.username">{{c.username}}</option>
+        </select>   
+        <hr>         
+        <button class="btn btn-primary" type="submit">Add
+            <i class="fas fa-user-plus"></i>
+        </button>
+        </form>
+    </div>    
+
+    <div *ngIf="!roomFlag" id="room-list">
+        <h3 class='title-list'>Rooms <i class="fas fa-comments"></i></h3>
+    <div>    
+
+    <div *ngFor="let r of list_rooms" class='btns-box'>
+        <button (click)='onRoom(r)' class='btn btn-primary contact-box' >
+            <span>{{r.room}}</span>
+        </button>
+        <button (click)='onLeaveRoom(r)' class="btn btn-danger delete-btn">
+          Leave
+        </button>
+    </div>
 
 </div>

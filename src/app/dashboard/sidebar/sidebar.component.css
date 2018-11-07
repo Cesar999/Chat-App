@@ -34,7 +34,7 @@
 .contact-box{
   margin: 1%;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   flex-grow: 1;
 }
 
@@ -51,4 +51,18 @@
 
 .btns-box{
   display: flex;
+}
+
+.btn-rooms{
+  font-size: 1.1rem;
+  border: 4px solid white;
+  border-radius: 10px;
+  float: right;
+  font-weight: bold;
+}
+
+#room-list{
+  /* border: 2px solid orange; */
+  margin: 2%;
+  flex: 1;
 }

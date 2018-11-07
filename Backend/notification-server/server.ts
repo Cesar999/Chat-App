@@ -104,17 +104,17 @@ app.post('/save-user', function(req, res) {
     const user1 = new User({...req.body});
     user1.save()
     .then((u) => {
-        console.log(u);
+        //console.log(u);
     })
     .catch((e) => {
-        console.log(e);
+       // console.log(e);
     });
 });
 
 // ------------------------------
 
 app.post('/add-contact', function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     const contact = {username: req.body.contact};
     const mainUser = {username: req.body.mainUser};
     User.findOne(contact)
@@ -130,7 +130,7 @@ app.post('/add-contact', function(req, res) {
                         updateFriendContact(mainUser.username);
                     }
                     // console.log(obj_user.msg);
-                    console.log('test');
+                    
                     res.send({msg: obj_user.msg});
                 });
             });
@@ -145,7 +145,7 @@ app.post('/add-contact', function(req, res) {
 app.post('/delete-contact', async function(req, res) {
   const contact = {username: req.body.contact};
   const mainUser = {username: req.body.mainUser};
-  console.log(req.body);
+  //console.log(req.body);
   await deleteContact(contact, mainUser);
   const msg = await deleteContact(mainUser, contact);
   await emitContacts(mainUser.username);
@@ -157,7 +157,7 @@ app.post('/delete-contact', async function(req, res) {
 
 
 app.post('/conversation-id', function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     const conv_id = req.body;
     Conversation.findById(conv_id)
     .populate({
@@ -180,7 +180,7 @@ app.post('/conversation-id', function(req, res) {
 //-------------------------------------------------
 
 app.post('/create-room', function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     User.findOne({username: req.body.username})
     .then((u)=>{
         createRoomConversation(u._id, req.body.room);
@@ -192,13 +192,13 @@ app.post('/create-room', function(req, res) {
 });
 
 app.post('/get-rooms', async function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     const rooms = await findUserRooms(req.body);
     await res.send(rooms);
 });
 
 app.post('/invite-room', async function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     const user = await User.findOne({username: req.body.invite});
     await Conversation.findById({_id: req.body.toRoom})
     .then((c: any) => {
@@ -211,12 +211,12 @@ app.post('/invite-room', async function(req, res) {
 });
 
 app.post('/leave-room',async function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     const conv = await Conversation.findById({_id: req.body.conv_id});
     const user = await User.findOne({username: req.body.username});
     const index = conv.participants.indexOf(user._id);
     conv.participants.splice(index, 1);
-    console.log(conv.participants);
+    //console.log(conv.participants);
     await Conversation.findOneAndUpdate({_id: req.body.conv_id}, { $set: {'participants': conv.participants}});
     await res.send({msg: 'left room'});
 });

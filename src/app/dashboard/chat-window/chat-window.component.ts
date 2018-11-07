@@ -35,14 +35,14 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.dashboardService.getContactListener().subscribe(
       (res) => {
+        // console.log(res);
         // this.test = `${this.mainUser} to ${res.username}`;
-        if(res.hasOwnProperty('room')) {
+        if (res.hasOwnProperty('room')) {
           this.currentUser = res.room;
           const obj = {...res, conv_id: res._id};
           this.currentConv = obj.conv_id;
           this.getConversation(obj);
-        }
-        else{
+        } else {
           this.currentUser = res.username;
           this.currentConv = res.conv_id;
           this.getConversation(res);
@@ -52,7 +52,17 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.socket.getConvListener().subscribe(
       (res) => {
-        this.getConversation(res);
+        // console.log(res);
+        if (res.to === null) {
+          if (res.currentUser === this.currentUser) {
+            this.getConversation(res);
+          }
+        } else {
+          if ((res.author === this.currentUser || res.author === this.mainUser)) {
+            this.getConversation(res);
+          }
+        }
+
       }
     );
 
@@ -67,25 +77,19 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     // this.test = JSON.stringify(this.dashboardService.getList());
     this.appService.checkAuth().subscribe(
      (response) => {
+      const temp = localStorage.getItem('flag') === 'Rooms' ? this.currentUser : null;
         if (response['authorization'] === true ) {
           const data = {
             msg: this.messageForm.value.message,
             conv_id: this.currentConv,
             author: this.mainUser,
-            to: null,
-            date: moment().format()
+            to: temp,
+            date: moment().format(),
+            currentUser: this.currentUser
           };
-            if(localStorage.getItem('flag')==='Rooms' ){
-              data.to = this.currentUser;
-              this.socket.sendMsg(data);
-              this.messageForm.reset();
-              this.socket.listenConv();
-            }
-            else{
-              this.socket.sendMsg(data);
-              this.messageForm.reset();
-              this.socket.listenConv();
-            }
+            this.socket.sendMsg(data);
+            this.messageForm.reset();
+            this.socket.listenConv();
         } else {
         }
       },
@@ -107,17 +111,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     // console.log(c);
     this.appService.getConversation({_id: c.conv_id}).subscribe(
       (response: any) => {
-        console.log(response);
-        if(response.room!==null){
-          this.currentUser = response.room;
-        } else {
-          for(let p of response.participants){
-            if(p.username !== this.mainUser){
-               this.currentUser = p.username;
-            }
-          }
-        }
-        this.msg_arr = response.messages;
+          this.msg_arr = response.messages;
       }
     );
   }

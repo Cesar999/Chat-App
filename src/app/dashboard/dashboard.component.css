@@ -1,5 +1,6 @@
 .custom_container{
   margin: 1%;
+  min-width: 623px;
 }
 
 .btn-logout{

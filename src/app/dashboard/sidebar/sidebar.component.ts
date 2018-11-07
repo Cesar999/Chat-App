@@ -13,6 +13,7 @@ import { DashboardService } from '../dashboard.service';
 export class SidebarComponent implements OnInit {
   contactForm: FormGroup;
   roomForm: FormGroup;
+  inviteForm: FormGroup;
   msg: string;
   show_msg: boolean;
   contactlist: any;
@@ -21,7 +22,7 @@ export class SidebarComponent implements OnInit {
   roomFlag = true;
   tag_btn = 'Rooms';
 
-  list_rooms = [];
+  list_rooms: any;
 
   constructor(private appService: AppService, private router: Router, private cookieService: CookieService,
   private socket: WebsocketService, private dashboardService: DashboardService) { }
@@ -31,11 +32,11 @@ export class SidebarComponent implements OnInit {
       'contact': new FormControl(null, [Validators.required])
     });
 
-    this.roomForm= new FormGroup({
+    this.roomForm = new FormGroup({
       'room': new FormControl(null, [Validators.required])
     });
 
-    this.inviteForm= new FormGroup({
+    this.inviteForm = new FormGroup({
       'invite': new FormControl(null, [Validators.required]),
       'toRoom': new FormControl(null, [Validators.required])
     });
@@ -125,16 +126,16 @@ export class SidebarComponent implements OnInit {
 
   toggleRooms() {
     this.roomFlag = !this.roomFlag;
-    this.tag_btn = this.roomFlag ? 'Rooms':'Contacts';
+    this.tag_btn = this.roomFlag ? 'Rooms' : 'Contacts';
     localStorage.setItem('flag', this.tag_btn);
-    if(!this.roomFlag){
+    if (!this.roomFlag) {
       this.appService.checkAuth().subscribe(
       (response) => {
         if (response['authorization'] === true ) {
           this.appService.getRooms({username: localStorage.getItem('username')}).subscribe(
-            (response) => {
+            (res) => {
             //  console.log(response);
-              this.list_rooms = response;
+              this.list_rooms = res;
             }
           );
         } else {
@@ -153,8 +154,8 @@ export class SidebarComponent implements OnInit {
         if (response['authorization'] === true ) {
           console.log(this.roomForm.value);
           this.appService.createRoom({username: localStorage.getItem('username'), room: this.roomForm.value.room}).subscribe(
-            (response) => {
-            //  console.log(response);
+            () => {
+            // console.log(response);
               this.roomForm.reset();
             }
           );
@@ -167,7 +168,7 @@ export class SidebarComponent implements OnInit {
     );
   }
 
-onRoom(r){
+onRoom(r) {
  // console.log(r);
   this.dashboardService.listenContact(r);
 }
@@ -179,10 +180,10 @@ onInviteRoom() {
         if (response['authorization'] === true ) {
           this.appService.inviteToRoom(this.inviteForm.value)
           .subscribe(
-            (response) => {
-             console.log(response);
+            (res) => {
+             console.log(res);
             }
-          )
+          );
         } else {
         }
       },
@@ -199,16 +200,16 @@ onLeaveRoom(r) {
         if (response['authorization'] === true ) {
           this.appService.leaveRoom(obj)
           .subscribe(
-            (response) => {
-             if(response.msg==='left room'){
+            (res) => {
+             if (res['msg'] === 'left room') {
                 this.appService.getRooms({username: localStorage.getItem('username')}).subscribe(
-                  (response) => {
-                  this.list_rooms = response;
+                  (res1) => {
+                  this.list_rooms = res1;
                   }
                 );
              }
             }
-          )
+          );
         } else {
         }
       },

@@ -143,7 +143,7 @@ app.post('/save-user', function (req, res) {
     var user1 = new User(__assign({}, req.body));
     user1.save()
         .then(function (u) {
-        //console.log(u);
+        // console.log(u);
     })
         .catch(function (e) {
         // console.log(e);
@@ -151,7 +151,7 @@ app.post('/save-user', function (req, res) {
 });
 // ------------------------------
 app.post('/add-contact', function (req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     var contact = { username: req.body.contact };
     var mainUser = { username: req.body.mainUser };
     User.findOne(contact)
@@ -184,10 +184,10 @@ app.post('/delete-contact', function (req, res) {
                 case 0:
                     contact = { username: req.body.contact };
                     mainUser = { username: req.body.mainUser };
-                    //console.log(req.body);
+                    // console.log(req.body);
                     return [4 /*yield*/, deleteContact(contact, mainUser)];
                 case 1:
-                    //console.log(req.body);
+                    // console.log(req.body);
                     _a.sent();
                     return [4 /*yield*/, deleteContact(mainUser, contact)];
                 case 2:
@@ -208,7 +208,7 @@ app.post('/delete-contact', function (req, res) {
 });
 // -------------------------------------------------
 app.post('/conversation-id', function (req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     var conv_id = req.body;
     Conversation.findById(conv_id)
         .populate({
@@ -228,9 +228,9 @@ app.post('/conversation-id', function (req, res) {
         res.send(c);
     });
 });
-//-------------------------------------------------
+// -------------------------------------------------
 app.post('/create-room', function (req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     User.findOne({ username: req.body.username })
         .then(function (u) {
         createRoomConversation(u._id, req.body.room);
@@ -292,10 +292,10 @@ app.post('/leave-room', function (req, res) {
                     user = _a.sent();
                     index = conv.participants.indexOf(user._id);
                     conv.participants.splice(index, 1);
-                    //console.log(conv.participants);
+                    // console.log(conv.participants);
                     return [4 /*yield*/, Conversation.findOneAndUpdate({ _id: req.body.conv_id }, { $set: { 'participants': conv.participants } })];
                 case 3:
-                    //console.log(conv.participants);
+                    // console.log(conv.participants);
                     _a.sent();
                     return [4 /*yield*/, res.send({ msg: 'left room' })];
                 case 4:

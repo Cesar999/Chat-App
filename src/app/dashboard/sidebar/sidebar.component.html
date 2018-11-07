@@ -41,20 +41,20 @@
             (ngSubmit)="onInviteRoom()">
         <select class="form-control" formControlName="toRoom">
             <option *ngFor="let s of list_rooms" [value]="s._id">{{s.room}}</option>
-        </select>    
+        </select>
         <select class="form-control" formControlName="invite">
             <option *ngFor="let c of contactlist" [value]="c.username">{{c.username}}</option>
-        </select>   
-        <hr>         
+        </select>
+        <hr>
         <button class="btn btn-primary" type="submit">Add
             <i class="fas fa-user-plus"></i>
         </button>
         </form>
-    </div>    
+    </div>
 
     <div *ngIf="!roomFlag" id="room-list">
         <h3 class='title-list'>Rooms <i class="fas fa-comments"></i></h3>
-    <div>    
+    <div>
 
     <div *ngFor="let r of list_rooms" class='btns-box'>
         <button (click)='onRoom(r)' class='btn btn-primary contact-box' >

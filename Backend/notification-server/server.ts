@@ -1,6 +1,6 @@
 import express from 'express';
 import * as bodyParser from 'body-parser';
-import mongoose from 'mongoose';
+import mongoose, { Mongoose, DocumentQuery } from 'mongoose';
 import axios from 'axios';
 import socket from 'socket.io';
 
@@ -104,7 +104,7 @@ app.post('/save-user', function(req, res) {
     const user1 = new User({...req.body});
     user1.save()
     .then((u) => {
-        //console.log(u);
+        // console.log(u);
     })
     .catch((e) => {
        // console.log(e);
@@ -114,7 +114,7 @@ app.post('/save-user', function(req, res) {
 // ------------------------------
 
 app.post('/add-contact', function(req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     const contact = {username: req.body.contact};
     const mainUser = {username: req.body.mainUser};
     User.findOne(contact)
@@ -130,7 +130,7 @@ app.post('/add-contact', function(req, res) {
                         updateFriendContact(mainUser.username);
                     }
                     // console.log(obj_user.msg);
-                    
+
                     res.send({msg: obj_user.msg});
                 });
             });
@@ -145,7 +145,7 @@ app.post('/add-contact', function(req, res) {
 app.post('/delete-contact', async function(req, res) {
   const contact = {username: req.body.contact};
   const mainUser = {username: req.body.mainUser};
-  //console.log(req.body);
+  // console.log(req.body);
   await deleteContact(contact, mainUser);
   const msg = await deleteContact(mainUser, contact);
   await emitContacts(mainUser.username);
@@ -157,7 +157,7 @@ app.post('/delete-contact', async function(req, res) {
 
 
 app.post('/conversation-id', function(req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     const conv_id = req.body;
     Conversation.findById(conv_id)
     .populate({
@@ -169,7 +169,7 @@ app.post('/conversation-id', function(req, res) {
         model: 'User'
       }
     })
-    .populate({      
+    .populate({
       path: 'participants',
       select: 'username'})
     .then((c) => {
@@ -177,32 +177,32 @@ app.post('/conversation-id', function(req, res) {
     });
 });
 
-//-------------------------------------------------
+// -------------------------------------------------
 
 app.post('/create-room', function(req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     User.findOne({username: req.body.username})
-    .then((u)=>{
+    .then((u) => {
         createRoomConversation(u._id, req.body.room);
     })
-    .then(()=>{
-        res.send({msg:'Room created'});
+    .then(() => {
+        res.send({msg: 'Room created'});
     })
-    .catch((e)=>console.log(e))
+    .catch((e) => console.log(e));
 });
 
 app.post('/get-rooms', async function(req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     const rooms = await findUserRooms(req.body);
     await res.send(rooms);
 });
 
 app.post('/invite-room', async function(req, res) {
-    //console.log(req.body);
+    // console.log(req.body);
     const user = await User.findOne({username: req.body.invite});
     await Conversation.findById({_id: req.body.toRoom})
     .then((c: any) => {
-    if(c.participants.indexOf(user._id)===-1){
+    if (c.participants.indexOf(user._id) === -1) {
         c.participants.push(user._id);
         c.save();
         res.send({msg: 'User has been invited'});
@@ -210,13 +210,18 @@ app.post('/invite-room', async function(req, res) {
     });
 });
 
-app.post('/leave-room',async function(req, res) {
-    //console.log(req.body);
-    const conv = await Conversation.findById({_id: req.body.conv_id});
+interface Document {
+  [prop: string]: any;
+  participants?: mongoose.Types.ObjectId[];
+}
+
+app.post('/leave-room', async function(req, res) {
+    // console.log(req.body);
+    const conv: Document = await Conversation.findById({_id: req.body.conv_id});
     const user = await User.findOne({username: req.body.username});
     const index = conv.participants.indexOf(user._id);
     conv.participants.splice(index, 1);
-    //console.log(conv.participants);
+    // console.log(conv.participants);
     await Conversation.findOneAndUpdate({_id: req.body.conv_id}, { $set: {'participants': conv.participants}});
     await res.send({msg: 'left room'});
 });
@@ -441,27 +446,25 @@ async function storeMessage(data: any) {
 
 function returnConversation(data: any, socket_nickname: any) {
   users[socket_nickname].emit('chat conversation', data);
-  if(data.to!==null){
+  if (data.to !== null) {
     users[data.to].emit('chat conversation', data);
-  }
-  else{
+  } else {
      Conversation.findById({_id: data.conv_id})
      .populate({
         path: 'participants',
         select: 'username _id'
      })
-     .then((c)=>{
-         for (let u of c.participants){
+     .then((c: any) => {
+         for (const u of c.participants) {
              users[u.username].emit('chat conversation', data);
          }
-     })
+     });
   }
 }
 
-async function findUserRooms(user){
-    let temp_arr = [];
+async function findUserRooms(user: any) {
+    const temp_arr = [];
     const user_id = await User.findOne(user);
-    
     const rooms = await Conversation.find({room: { $ne: null }, participants: { $in: [user_id._id] }})
     .populate({
       path: 'participants',

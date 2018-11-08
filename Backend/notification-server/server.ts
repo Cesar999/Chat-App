@@ -1,6 +1,6 @@
 import express from 'express';
 import * as bodyParser from 'body-parser';
-import mongoose, { Mongoose, DocumentQuery } from 'mongoose';
+import mongoose from 'mongoose';
 import axios from 'axios';
 import socket from 'socket.io';
 

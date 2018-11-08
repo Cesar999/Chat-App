@@ -53,7 +53,8 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.socket.getConvListener().subscribe(
       (res) => {
-         console.log(res);
+        // console.log(res);
+         this.storeNewMessage(res.author); // $$$$$$$$$$$$$$$$$$
         if (res.to === null) {
           if (res.currentUser === this.currentUser) {
             this.getConversation(res);
@@ -63,7 +64,6 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
             this.getConversation(res);
           }
         }
-
       }
     );
 
@@ -72,6 +72,10 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     this.scrollToBottom();
+  }
+
+  storeNewMessage(username) {
+    console.log('new message in ', username);
   }
 
   onSend() {
@@ -90,7 +94,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
           };
             this.socket.sendMsg(data);
             this.messageForm.reset();
-            this.socket.listenConv();
+           // this.socket.listenConv();
         } else {
         }
       },

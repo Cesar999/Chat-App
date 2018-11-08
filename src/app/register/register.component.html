@@ -2,15 +2,18 @@
   <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6 box">
+        <span class='logo'><i class="fas fa-rocket"></i> Rocket Chat</span>
+        <br>
+        <hr>
       <form [formGroup]="projectForm" class="form-group" (ngSubmit)="onSubmit()">
-          <label for="username">Username</label>
+          <label for="username"><i class="fas fa-user-tag"></i> Username</label>
           <input class="form-control" id="username" formControlName="username">
           <span class="alert" *ngIf="invalidUser&&projectForm.get('username').dirty">Username already exists</span>
           <br>
-          <label for="password">Password</label>
+          <label for="password"><i class="fas fa-key"></i> Password</label>
           <input class="form-control" id="password" formControlName="password" type="password">
           <br>
-          <label for="password2">Confirm Password</label>
+          <label for="password2"><i class="fas fa-key"></i> Confirm Password</label>
           <input class="form-control" id="password2" formControlName="password2" (input)="onChange()" type="password">
           <span class="alert" *ngIf="invalidPass&&projectForm.get('password2').dirty">Passwords don't match</span>
           <br>

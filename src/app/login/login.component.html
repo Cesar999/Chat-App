@@ -1,14 +1,18 @@
 <div class="container">
   <div class="row">
-    <div class="col-lg-3"></div>
+    <div class="col-lg-3">
+    </div>
     <div class="col-lg-6 box">
+       <span class='logo'><i class="fas fa-rocket"></i> Rocket Chat</span>
+      <br>
+      <hr>
       <form [formGroup]="projectForm" class="form-group"
       (ngSubmit)="onSubmit()">
-          <label for="username">Username</label>
+          <label for="username"><i class="fas fa-user-tag"></i> Username </label>
           <input class="form-control" id="username" formControlName="username">
           <span class='alert' *ngIf="show_msg">{{msg}}</span>
           <br>
-          <label for="password">Password</label>
+          <label for="password"> <i class="fas fa-key"></i> Password </label>
           <input class="form-control" id="password" formControlName="password" type="password">
           <br>
         <button class="btn btn-primary btn-login btn-lg" type="submit" [disabled]="!projectForm.valid">Login</button>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
-import { Observable, Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,7 @@ export class WebsocketService {
   constructor() {
     this.socket = io('http://localhost:3001');
   }
+
 
 // ---------------------------------------
   sendMsg(data) {
@@ -64,7 +65,7 @@ export class WebsocketService {
 
   listenInvited() {
     this.socket.on('listen invited', (data) => {
-      this.invited.next(data);
+     this.invited.next(data);
     });
   }
 

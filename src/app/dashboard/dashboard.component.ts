@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
     this.mainUser = localStorage.getItem('username');
     this.socket.emitOnline({username: this.mainUser});
     this.socket.listenList();
+    localStorage.setItem('flag', 'Rooms');
   }
 
 onLogout() {

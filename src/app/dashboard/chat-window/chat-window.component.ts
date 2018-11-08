@@ -35,7 +35,6 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.dashboardService.getContactListener().subscribe(
       (res) => {
-        this.socket.listenConv();
          console.log(res);
         // this.test = `${this.mainUser} to ${res.username}`;
         if (res.hasOwnProperty('room')) {
@@ -51,9 +50,9 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
       }
     );
 
-    this.socket.getConvListener().subscribe(
-      (res) => {
-        // console.log(res);
+    this.socket.listenConv().subscribe(
+      (res: any) => {
+        console.log(res);
          this.storeNewMessage(res.author); // $$$$$$$$$$$$$$$$$$
         if (res.to === null) {
           if (res.currentUser === this.currentUser) {
@@ -94,7 +93,6 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
           };
             this.socket.sendMsg(data);
             this.messageForm.reset();
-           // this.socket.listenConv();
         } else {
         }
       },

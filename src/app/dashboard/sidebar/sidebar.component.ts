@@ -41,13 +41,13 @@ export class SidebarComponent implements OnInit {
       'toRoom': new FormControl(null, [Validators.required])
     });
 
-    this.socket.getListListener().subscribe(data => {
+    this.socket.listenList().subscribe(data => {
     //  console.log(data);
       this.contactlist = data;
       this.dashboardService.setList(data);
     });
 
-    this.socket.getInvitedListener().subscribe(data => {
+    this.socket.listenInvited().subscribe(data => {
         // console.log(data, 'SIDEBAR');
         this.appService.getRooms({username: localStorage.getItem('username')}).subscribe(
           (res) => {
@@ -56,8 +56,6 @@ export class SidebarComponent implements OnInit {
           }
         );
     });
-
-    this.socket.listenInvited();
 
   }
 

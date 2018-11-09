@@ -35,7 +35,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.dashboardService.getContactListener().subscribe(
       (res) => {
-         console.log(res);
+        // console.log(res);
         // this.test = `${this.mainUser} to ${res.username}`;
         if (res.hasOwnProperty('room')) {
           this.currentUser = res.room;
@@ -52,14 +52,17 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
     this.socket.listenConv().subscribe(
       (res: any) => {
-        console.log(res);
-         this.storeNewMessage(res.author); // $$$$$$$$$$$$$$$$$$
+        // console.log(res);
+         this.notifyNewMessage(res); // $$$$$$$$$$$$$$$$$$ NOTIFY
         if (res.to === null) {
           if (res.currentUser === this.currentUser) {
             this.getConversation(res);
           }
         } else {
           if ((res.author === this.currentUser || res.author === this.mainUser)) {
+            if (res.currentUser !== this.currentUser) {
+              this.socket.emitSeenMsg(res.msg_id);
+            }
             this.getConversation(res);
           }
         }
@@ -73,8 +76,13 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     this.scrollToBottom();
   }
 
-  storeNewMessage(username) {
-    console.log('new message in ', username);
+  notifyNewMessage(msg) {  // $$$$$$$$$$$$$$$$$$ NOTIFY
+    console.log('new message in ', msg);
+    // this.appService.getConversation({_id: msg.conv_id}).subscribe(
+    //   (response: any) => {
+    //       console.log(response.messages[response.messages.length - 1]);
+    //   }
+    // );
   }
 
   onSend() {

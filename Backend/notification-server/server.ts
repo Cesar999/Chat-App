@@ -31,7 +31,8 @@ const messageSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
       },
-    date: {type: String}
+    date: {type: String},
+    seen: [{type: String}]
 });
 
 const conversationSchema = new Schema({
@@ -162,7 +163,7 @@ app.post('/conversation-id', function(req, res) {
     Conversation.findById(conv_id)
     .populate({
       path: 'messages',
-      select: 'content author _id date room',
+      select: 'content author _id date room seen',
       populate: {
         path: 'author',
         select: 'username',
@@ -317,8 +318,10 @@ io.sockets.on('connection', (socket: ISocket) => {
 
     socket.on('chat message', async (data) => {
        // console.log(data);
-        await storeMessage(data);
-        await returnConversation(data, socket.nickname);
+        const message: any = await storeMessage(data);
+        const obj = {...data, msg_id: message._id, seen: message.seen};
+        await returnConversation(obj, socket.nickname);
+        await updateFriendContact(socket.nickname);
     });
 
     socket.on('user online', (data: any) => {
@@ -360,6 +363,14 @@ io.sockets.on('connection', (socket: ISocket) => {
     });
    });
 
+   socket.on('seen message', (data) => {
+      Message.findOneAndUpdate({_id: data}, { $set: {'seen': []}})
+      .then((m) => {
+      emitContacts(socket.nickname);
+      updateFriendContact(socket.nickname);
+      });
+    });
+
 });
 // -------------END SOCKETS------------------
 
@@ -389,13 +400,17 @@ async function populateContacts(data_username: string) {
             let online = false;
             let obj: any;
             for (const c of user.contacts) {
-                const conv_id = await getConversationId(user._id, c._id);
+                const conv: any = await getConversationId(user._id, c._id);
                 if (users.hasOwnProperty(c.username)) {
                     online = true;
                 } else {
                     online = false;
                 }
-                obj = {...c._doc, online, conv_id};
+                let seen: any = {seen : []};
+                if (conv !== null) {
+                  seen = conv.messages[conv.messages.length - 1];
+                }
+                obj = {...c._doc, online, conv_id: conv._id, last_msg: seen};
                // console.log(obj);
                 list.push(obj);
             }
@@ -420,22 +435,36 @@ function updateFriendContact(nickname: string) {
 }
 
 async function getConversationId(user_id: any, contact_id: any) {
-    const conv_id = await Conversation.findOne({participants: {$all: [user_id, contact_id]}, room: null})
+    const conv = await Conversation.findOne({participants: {$all: [user_id, contact_id]}, room: null})
+    .populate({
+      path: 'messages',
+      select: 'content author _id date room seen',
+      populate: {
+        path: 'author',
+        select: 'username',
+        model: 'User'
+      }
+    })
     .then((c) => {
        // console.log(c, 'fail');
-        return c._id;
+        return c;
     });
-    return await conv_id;
+    return await conv;
 }
 
 async function storeMessage(data: any) {
     const user = await User.findOne({username: data.author});
+    const conv: any = await Conversation.findById({_id: data.conv_id})
+        .populate({path: 'participants', select: 'username _id'});
+
     const msg = new Message({
         content: data.msg,
         conversation: data.conv_id,
         author: user._id,
-        date: data.date
+        date: data.date,
+        seen: conv.participants
     });
+
     const message = await msg.save();
 
     Conversation.findById({_id: data.conv_id})
@@ -443,6 +472,8 @@ async function storeMessage(data: any) {
       c.messages.push(message._id);
       c.save();
     });
+
+    return await message;
 }
 
 function returnConversation(data: any, socket_nickname: any) {

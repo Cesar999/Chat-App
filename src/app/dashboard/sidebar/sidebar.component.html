@@ -18,6 +18,7 @@
     <div *ngFor="let c of contactlist" class='btns-box'>
         <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" >
             <i class="fas fa-user"></i><span>{{c.username}}</span>
+            <i *ngIf='checkSeen(c)' class="far fa-envelope"></i>
         </button>
         <button class="btn btn-danger delete-btn" (click)='onDelete(c)'>
            <i class="fas fa-user-times"></i><span></span>

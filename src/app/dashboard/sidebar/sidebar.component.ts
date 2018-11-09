@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit {
     });
 
     this.socket.listenList().subscribe(data => {
-    //  console.log(data);
+    console.log(data);
       this.contactlist = data;
       this.dashboardService.setList(data);
     });
@@ -108,6 +108,10 @@ export class SidebarComponent implements OnInit {
         if (response['authorization'] === true ) {
           this.getConversation(c);
           this.dashboardService.listenContact(c);
+          console.log(c);
+          if (c.last_msg.author.username !== localStorage.getItem('username')) {
+            this.socket.emitSeenMsg(c.last_msg._id);
+          }
         } else {
         }
       },
@@ -230,6 +234,16 @@ onLeaveRoom(r) {
         this.logOut();
       }
     );
+}
+
+checkSeen(c) {
+  if (c.last_msg) {
+    if (c.last_msg.author.username !== localStorage.getItem('username')) {
+      return c.last_msg.seen.length > 0;
+    }
+  } else {
+      return false;
+  }
 }
 
 }// END CLASS

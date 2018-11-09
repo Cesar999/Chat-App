@@ -86,7 +86,8 @@ var messageSchema = new Schema({
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'User'
     },
-    date: { type: String }
+    date: { type: String },
+    seen: [{ type: String }]
 });
 var conversationSchema = new Schema({
     participants: [{
@@ -213,7 +214,7 @@ app.post('/conversation-id', function (req, res) {
     Conversation.findById(conv_id)
         .populate({
         path: 'messages',
-        select: 'content author _id date room',
+        select: 'content author _id date room seen',
         populate: {
             path: 'author',
             select: 'username',
@@ -399,16 +400,18 @@ var io = socket_io_1.default(server);
 // tslint:disable-next-line:no-shadowed-variable
 io.sockets.on('connection', function (socket) {
     socket.on('chat message', function (data) { return __awaiter(_this, void 0, void 0, function () {
+        var message, obj;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: 
-                // console.log(data);
-                return [4 /*yield*/, storeMessage(data)];
+                case 0: return [4 /*yield*/, storeMessage(data)];
                 case 1:
-                    // console.log(data);
-                    _a.sent();
-                    return [4 /*yield*/, returnConversation(data, socket.nickname)];
+                    message = _a.sent();
+                    obj = __assign({}, data, { msg_id: message._id, seen: message.seen });
+                    return [4 /*yield*/, returnConversation(obj, socket.nickname)];
                 case 2:
+                    _a.sent();
+                    return [4 /*yield*/, updateFriendContact(socket.nickname)];
+                case 3:
                     _a.sent();
                     return [2 /*return*/];
             }
@@ -460,6 +463,13 @@ io.sockets.on('connection', function (socket) {
             }
         });
     }); });
+    socket.on('seen message', function (data) {
+        Message.findOneAndUpdate({ _id: data }, { $set: { 'seen': [] } })
+            .then(function (m) {
+            emitContacts(socket.nickname);
+            updateFriendContact(socket.nickname);
+        });
+    });
 });
 // -------------END SOCKETS------------------
 function emitContacts(socket_nickname) {
@@ -500,7 +510,7 @@ function populateContacts(data_username) {
                             select: 'username _id'
                         })
                             .then(function (user) { return __awaiter(_this, void 0, void 0, function () {
-                            var online, obj, _i, _a, c, conv_id;
+                            var online, obj, _i, _a, c, conv, seen;
                             return __generator(this, function (_b) {
                                 switch (_b.label) {
                                     case 0:
@@ -514,14 +524,18 @@ function populateContacts(data_username) {
                                         c = _a[_i];
                                         return [4 /*yield*/, getConversationId(user._id, c._id)];
                                     case 2:
-                                        conv_id = _b.sent();
+                                        conv = _b.sent();
                                         if (users.hasOwnProperty(c.username)) {
                                             online = true;
                                         }
                                         else {
                                             online = false;
                                         }
-                                        obj = __assign({}, c._doc, { online: online, conv_id: conv_id });
+                                        seen = { seen: [] };
+                                        if (conv !== null) {
+                                            seen = conv.messages[conv.messages.length - 1];
+                                        }
+                                        obj = __assign({}, c._doc, { online: online, conv_id: conv._id, last_msg: seen });
                                         // console.log(obj);
                                         list.push(obj);
                                         _b.label = 3;
@@ -556,17 +570,26 @@ function updateFriendContact(nickname) {
 }
 function getConversationId(user_id, contact_id) {
     return __awaiter(this, void 0, void 0, function () {
-        var conv_id;
+        var conv;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, Conversation.findOne({ participants: { $all: [user_id, contact_id] }, room: null })
+                        .populate({
+                        path: 'messages',
+                        select: 'content author _id date room seen',
+                        populate: {
+                            path: 'author',
+                            select: 'username',
+                            model: 'User'
+                        }
+                    })
                         .then(function (c) {
                         // console.log(c, 'fail');
-                        return c._id;
+                        return c;
                     })];
                 case 1:
-                    conv_id = _a.sent();
-                    return [4 /*yield*/, conv_id];
+                    conv = _a.sent();
+                    return [4 /*yield*/, conv];
                 case 2: return [2 /*return*/, _a.sent()];
             }
         });
@@ -574,27 +597,33 @@ function getConversationId(user_id, contact_id) {
 }
 function storeMessage(data) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, msg, message;
+        var user, conv, msg, message;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, User.findOne({ username: data.author })];
                 case 1:
                     user = _a.sent();
+                    return [4 /*yield*/, Conversation.findById({ _id: data.conv_id })
+                            .populate({ path: 'participants', select: 'username _id' })];
+                case 2:
+                    conv = _a.sent();
                     msg = new Message({
                         content: data.msg,
                         conversation: data.conv_id,
                         author: user._id,
-                        date: data.date
+                        date: data.date,
+                        seen: conv.participants
                     });
                     return [4 /*yield*/, msg.save()];
-                case 2:
+                case 3:
                     message = _a.sent();
                     Conversation.findById({ _id: data.conv_id })
                         .then(function (c) {
                         c.messages.push(message._id);
                         c.save();
                     });
-                    return [2 /*return*/];
+                    return [4 /*yield*/, message];
+                case 4: return [2 /*return*/, _a.sent()];
             }
         });
     });

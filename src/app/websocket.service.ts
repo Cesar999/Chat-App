@@ -61,5 +61,9 @@ export class WebsocketService {
     });
     return observable;
   }
+// ----------
+  emitSeenMsg(data) {
+    this.socket.emit('seen message', data);
+  }
 
 }

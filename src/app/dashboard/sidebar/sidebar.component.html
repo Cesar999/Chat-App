@@ -1,8 +1,11 @@
 <div class="wrapper" >
+
 <button class='btn btn-info btn-rooms' (click)='toggleRooms()'>{{tag_btn}}</button>
+<span class='custom_alert'>
+  <span *ngIf="show_msg">{{msg}}</span>&nbsp;
+</span>
 
   <div *ngIf="roomFlag"  id="addContact-bar">
-      <span *ngIf="show_msg">{{msg}}</span>
       <form [formGroup]="contactForm" class="form-group"
       (ngSubmit)="onAdd()">
         <input class="form-control" id="send-message" formControlName="contact">
@@ -15,15 +18,19 @@
     <div *ngIf="roomFlag" id="contact-list" >
     <h3 class='title-list'>Contacts <i class="fas fa-user-friends"></i></h3>
 
-    <div *ngFor="let c of contactlist" class='btns-box'>
-        <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" >
-            <i class="fas fa-user"></i><span>{{c.username}}</span>
-            <i *ngIf='checkSeen(c)' class="far fa-envelope"></i>
-        </button>
-        <button class="btn btn-danger delete-btn" (click)='onDelete(c)'>
-           <i class="fas fa-user-times"></i><span></span>
-        </button>
+    <div class="overflow_container">
+        <div *ngFor="let c of contactlist" class='btns-box'>
+            <button (click)='onClick(c)'  [ngClass]="c.online ? 'btn btn-primary contact-box' : 'btn btn-basic contact-box'" >
+                <i class="fas fa-user"></i><span>{{c.username}}</span>
+                <i *ngIf='checkSeen(c)' class="far fa-envelope"></i>
+            </button>
+            <button class="btn btn-danger delete-btn" (click)='onDelete(c)'>
+               <i class="fas fa-user-times"></i><span></span>
+            </button>
+        </div>
     </div>
+
+
   </div>
 
   <!-- Room flag false -->
@@ -57,6 +64,7 @@
         <h3 class='title-list'>Rooms <i class="fas fa-comments"></i></h3>
     <div>
 
+    <div>
     <div *ngFor="let r of list_rooms" class='btns-box'>
         <button (click)='onRoom(r)' class='btn btn-primary contact-box' >
             <span>{{r.room}}</span>
@@ -66,5 +74,5 @@
           Leave
         </button>
     </div>
-
+    </div>
 </div>

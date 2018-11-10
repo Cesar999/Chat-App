@@ -19,6 +19,7 @@
   margin: 1%;
   flex: 1;
   overflow: scroll;
+  overflow-x: hidden;
   background-color: white;
   font-size: 1.2rem;
   border-radius: 10px;

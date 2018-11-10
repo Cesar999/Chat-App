@@ -8,6 +8,12 @@
   /* min-width: 160px; */
 }
 
+.overflow_container{
+  height: 80%;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
 @media only screen and (max-width: 600px) {
   .wrapper{
     width: 90vw;
@@ -26,6 +32,7 @@
   /* border: 2px solid orange; */
   margin: 2%;
   flex: 1;
+  height: 70%;
 }
 
 #addContact-bar{
@@ -66,10 +73,18 @@
   border-radius: 10px;
   float: right;
   font-weight: bold;
+  min-height: 10%;
+  margin-bottom: 2%;
 }
 
 #room-list{
   /* border: 2px solid orange; */
   margin: 2%;
   flex: 1;
+}
+
+.custom_alert{
+  text-align: center;
+  font-weight: bold;
+  display: inline-block;
 }

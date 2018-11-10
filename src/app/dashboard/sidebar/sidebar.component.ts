@@ -107,7 +107,7 @@ export class SidebarComponent implements OnInit {
         this.show_msg = true;
         setTimeout(() => {
           this.show_msg = false;
-        }, 2000);
+        }, 2500);
       },
       (error) => {
 

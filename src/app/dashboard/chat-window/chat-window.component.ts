@@ -33,7 +33,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
       'message': new FormControl(null, [Validators.required])
     });
 
-    this.dashboardService.getContactListener().subscribe(
+    this.dashboardService.getContactList().subscribe(
       (res) => {
         // console.log(res);
         // this.test = `${this.mainUser} to ${res.username}`;
@@ -42,10 +42,12 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
           const obj = {...res, conv_id: res._id};
           this.currentConv = obj.conv_id;
           this.getConversation(obj);
-        } else {
+        } else if (res.hasOwnProperty('username')) {
           this.currentUser = res.username;
           this.currentConv = res.conv_id;
           this.getConversation(res);
+        } else {
+          this.currentUser = 'none';
         }
       }
     );
@@ -77,12 +79,8 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   }
 
   notifyNewMessage(msg) {  // $$$$$$$$$$$$$$$$$$ NOTIFY
-    console.log('new message in ', msg);
-    // this.appService.getConversation({_id: msg.conv_id}).subscribe(
-    //   (response: any) => {
-    //       console.log(response.messages[response.messages.length - 1]);
-    //   }
-    // );
+    // console.log('new message in ', msg);
+    this.dashboardService.listenRoomMsg(msg);
   }
 
   onSend() {
@@ -122,7 +120,9 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     // console.log(c);
     this.appService.getConversation({_id: c.conv_id}).subscribe(
       (response: any) => {
+        if (response !== null) {
           this.msg_arr = response.messages;
+        }
       }
     );
   }

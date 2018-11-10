@@ -60,6 +60,7 @@
     <div *ngFor="let r of list_rooms" class='btns-box'>
         <button (click)='onRoom(r)' class='btn btn-primary contact-box' >
             <span>{{r.room}}</span>
+            <i *ngIf='checkSeenRoom(r)' class="far fa-envelope"></i>
         </button>
         <button (click)='onLeaveRoom(r)' class="btn btn-danger delete-btn">
           Leave

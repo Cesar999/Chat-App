@@ -32,7 +32,7 @@ const messageSchema = new Schema({
         ref: 'User'
       },
     date: {type: String},
-    seen: [{type: String}]
+    seen: [{username: String}]
 });
 
 const conversationSchema = new Schema({
@@ -44,7 +44,10 @@ const conversationSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
       }],
-      room: {type: String}
+      room: {type: String},
+      seen: [{
+        username : String
+         }]
 });
 
 interface IUser extends mongoose.Document {
@@ -364,11 +367,25 @@ io.sockets.on('connection', (socket: ISocket) => {
    });
 
    socket.on('seen message', (data) => {
-      Message.findOneAndUpdate({_id: data}, { $set: {'seen': []}})
-      .then((m) => {
-      emitContacts(socket.nickname);
-      updateFriendContact(socket.nickname);
-      });
+      if (data.room) {
+        Message.findById({_id: data.msg_id})
+        .then((m) => {
+          return m.seen.filter(u => u.username !== data.user);
+        })
+        .then((seen) => {
+          // console.log(seen);
+          Message.findOneAndUpdate({_id: data.msg_id}, { $set: {'seen': seen}})
+          .then((m) => {
+
+          });
+        });
+      } else {
+        Message.findOneAndUpdate({_id: data.msg_id}, { $set: {'seen': []}})
+        .then((m) => {
+        emitContacts(socket.nickname);
+        updateFriendContact(socket.nickname);
+        });
+      }
     });
 
 });
@@ -456,7 +473,6 @@ async function storeMessage(data: any) {
     const user = await User.findOne({username: data.author});
     const conv: any = await Conversation.findById({_id: data.conv_id})
         .populate({path: 'participants', select: 'username _id'});
-
     const msg = new Message({
         content: data.msg,
         conversation: data.conv_id,
@@ -495,12 +511,19 @@ function returnConversation(data: any, socket_nickname: any) {
 }
 
 async function findUserRooms(user: any) {
-    const temp_arr = [];
     const user_id = await User.findOne(user);
     const rooms = await Conversation.find({room: { $ne: null }, participants: { $in: [user_id._id] }})
     .populate({
       path: 'participants',
-      select: 'username',
+      select: 'username'
+    })
+    .populate({
+      path: 'messages',
+      select: 'seen author _id',
+      populate: {
+        path: 'author',
+        select: 'username _id'
+      }
     });
 
     return await rooms;

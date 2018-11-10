@@ -42,19 +42,29 @@ export class SidebarComponent implements OnInit {
     });
 
     this.socket.listenList().subscribe(data => {
-    console.log(data);
+      // console.log(data);
       this.contactlist = data;
       this.dashboardService.setList(data);
     });
 
     this.socket.listenInvited().subscribe(data => {
-        // console.log(data, 'SIDEBAR');
         this.appService.getRooms({username: localStorage.getItem('username')}).subscribe(
           (res) => {
-          //  console.log(response);
             this.list_rooms = res;
           }
         );
+    });
+
+    this.dashboardService.getRoomMsg().subscribe(data => {
+      if (data.to === null) {
+        // console.log(data);
+        this.appService.getRooms({username: localStorage.getItem('username')}).subscribe(
+          (res) => {
+           // console.log(res);
+            this.list_rooms = res;
+          }
+        );
+      }
     });
 
   }
@@ -108,11 +118,12 @@ export class SidebarComponent implements OnInit {
         if (response['authorization'] === true ) {
           this.getConversation(c);
           this.dashboardService.listenContact(c);
-          console.log(c);
-          if (c.last_msg.author.username !== localStorage.getItem('username')) {
-            this.socket.emitSeenMsg(c.last_msg._id);
+          // console.log(c);
+          if (c.last_msg) {
+            if (c.last_msg.author.username !== localStorage.getItem('username')) {
+              this.socket.emitSeenMsg({msg_id: c.last_msg._id, room: false});
+            }
           }
-        } else {
         }
       },
       (error) => {
@@ -190,8 +201,14 @@ export class SidebarComponent implements OnInit {
   }
 
 onRoom(r) {
- // console.log(r);
+  // console.log(r);
   this.dashboardService.listenContact(r);
+  if (r.messages[r.messages.length - 1]) {
+    if (r.messages[r.messages.length - 1].author.username !== localStorage.getItem('username')) {
+        this.socket.emitSeenMsg({msg_id: r.messages[r.messages.length - 1]._id, room: true, user: localStorage.getItem('username')});
+        r.messages = [];
+    }
+  }
 }
 
 onInviteRoom() {
@@ -237,6 +254,7 @@ onLeaveRoom(r) {
 }
 
 checkSeen(c) {
+  // console.log(c);
   if (c.last_msg) {
     if (c.last_msg.author.username !== localStorage.getItem('username')) {
       return c.last_msg.seen.length > 0;
@@ -245,5 +263,27 @@ checkSeen(c) {
       return false;
   }
 }
+
+checkSeenRoom(r) {
+  // console.log(r);
+  if (localStorage.getItem('currentUser') === r.room) {
+    return false;
+  }
+  if (r.messages.length) {
+    if (r.messages[r.messages.length - 1].author.username !== localStorage.getItem('username')) {
+     // console.log(r.messages[r.messages.length - 1].seen);
+      for (const u of r.messages[r.messages.length - 1].seen) {
+        // console.log(JSON.parse(u)[0], localStorage.getItem('username'));
+          if (u.username === localStorage.getItem('username')) {
+              return true;
+          }
+      }
+      return false;
+    }
+  } else {
+      return false;
+  }
+}
+
 
 }// END CLASS

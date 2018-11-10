@@ -87,7 +87,7 @@ var messageSchema = new Schema({
         ref: 'User'
     },
     date: { type: String },
-    seen: [{ type: String }]
+    seen: [{ username: String }]
 });
 var conversationSchema = new Schema({
     participants: [{
@@ -98,7 +98,10 @@ var conversationSchema = new Schema({
             type: mongoose_1.default.Schema.Types.ObjectId,
             ref: 'Message'
         }],
-    room: { type: String }
+    room: { type: String },
+    seen: [{
+            username: String
+        }]
 });
 var User = mongoose_1.default.model('User', userSchema, 'User');
 var Message = mongoose_1.default.model('Message', messageSchema, 'Message');
@@ -464,11 +467,25 @@ io.sockets.on('connection', function (socket) {
         });
     }); });
     socket.on('seen message', function (data) {
-        Message.findOneAndUpdate({ _id: data }, { $set: { 'seen': [] } })
-            .then(function (m) {
-            emitContacts(socket.nickname);
-            updateFriendContact(socket.nickname);
-        });
+        if (data.room) {
+            Message.findById({ _id: data.msg_id })
+                .then(function (m) {
+                return m.seen.filter(function (u) { return u.username !== data.user; });
+            })
+                .then(function (seen) {
+                // console.log(seen);
+                Message.findOneAndUpdate({ _id: data.msg_id }, { $set: { 'seen': seen } })
+                    .then(function (m) {
+                });
+            });
+        }
+        else {
+            Message.findOneAndUpdate({ _id: data.msg_id }, { $set: { 'seen': [] } })
+                .then(function (m) {
+                emitContacts(socket.nickname);
+                updateFriendContact(socket.nickname);
+            });
+        }
     });
 });
 // -------------END SOCKETS------------------
@@ -649,18 +666,24 @@ function returnConversation(data, socket_nickname) {
 }
 function findUserRooms(user) {
     return __awaiter(this, void 0, void 0, function () {
-        var temp_arr, user_id, rooms;
+        var user_id, rooms;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    temp_arr = [];
-                    return [4 /*yield*/, User.findOne(user)];
+                case 0: return [4 /*yield*/, User.findOne(user)];
                 case 1:
                     user_id = _a.sent();
                     return [4 /*yield*/, Conversation.find({ room: { $ne: null }, participants: { $in: [user_id._id] } })
                             .populate({
                             path: 'participants',
-                            select: 'username',
+                            select: 'username'
+                        })
+                            .populate({
+                            path: 'messages',
+                            select: 'seen author _id',
+                            populate: {
+                                path: 'author',
+                                select: 'username _id'
+                            }
                         })];
                 case 2:
                     rooms = _a.sent();

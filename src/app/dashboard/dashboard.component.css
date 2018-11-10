@@ -1,6 +1,6 @@
 .custom_container{
   margin: 1%;
-  min-width: 600px;
+  min-width: 300px;
 }
 
 .btn-logout{
@@ -12,6 +12,37 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 10px;
   border: 4px solid #dc3545;
-  margin: 0.5% 0.5% 1.5% 0.5%;
+  margin: 2%;
 }
+
+.margins{
+  margin: 0% 2% 0% 2%;
+}
+.chat, .sidebar{
+  display: inline-block;
+}
+.dash{
+  width: 95%!important;
+  margin: 0% 2% 0% 2%;
+}
+.chat{
+  width: 62%;
+  margin: 2% 2% 0% 2%;
+}
+.sidebar{
+  width: 30%;
+  margin: 2% 2% 0% 2%;
+}
+
+@media only screen and (max-width: 600px) {
+  .chat, .sidebar{
+    display: flex;
+    width: 90%;
+    margin: 3% 2% 3% 2%;
+  }
+  .dash{
+    margin: 3% 2% 3% 2%;
+  }
+}
+
 

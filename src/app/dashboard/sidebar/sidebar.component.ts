@@ -24,6 +24,9 @@ export class SidebarComponent implements OnInit {
 
   list_rooms: any;
 
+  msg2: string;
+  show_msg2: boolean;
+
   constructor(private appService: AppService, private router: Router, private cookieService: CookieService,
   private socket: WebsocketService, private dashboardService: DashboardService) { }
 
@@ -178,7 +181,7 @@ export class SidebarComponent implements OnInit {
     this.appService.checkAuth().subscribe(
       (response) => {
         if (response['authorization'] === true ) {
-          console.log(this.roomForm.value);
+          // console.log(this.roomForm.value);
           this.appService.createRoom({username: localStorage.getItem('username'), room: this.roomForm.value.room}).subscribe(
             (response2) => {
              console.log(response2);

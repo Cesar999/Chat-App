@@ -456,8 +456,10 @@ io.sockets.on('connection', function (socket) {
                             if (c.participants.indexOf(user._id) === -1) {
                                 c.participants.push(user._id);
                                 c.save();
-                                users[data.invite].emit('listen invited', { msg: 'invited' });
-                                console.log(data.invite);
+                                if (users[data.invite]) {
+                                    users[data.invite].emit('listen invited', { msg: 'invited' });
+                                }
+                                // console.log(data.invite);
                             }
                         })];
                 case 2:

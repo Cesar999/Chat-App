@@ -1,5 +1,5 @@
 <div class="custom_container">
-  <div class="row mainBar">
+  <!-- <div class="row mainBar">
       <div class="col-4">
           <h1>{{mainUser}}</h1>
       </div>
@@ -8,14 +8,37 @@
       <div class="col-3">
         <button class="btn btn-danger btn-logout" (click)="onLogout()">Logout</button>
       </div>
-    </div>
+  </div>
 
     <div class="row">
       <div class="col-4">
           <app-sidebar></app-sidebar>
       </div>
+
       <div class="col-8">
           <app-chat-window></app-chat-window>
       </div>
+    </div> -->
+
+    <div class="row dash mainBar">
+        <div class="col-4">
+            <h1>{{mainUser}}</h1>
+        </div>
+        <div class="col-5">
+        </div>
+        <div class="col-3">
+          <button class="btn btn-danger btn-logout" (click)="onLogout()">Logout</button>
+        </div>
     </div>
+
+    <div class="row margins">
+      <div class="sidebar">
+          <app-sidebar></app-sidebar>
+      </div>
+
+      <div class="chat">
+          <app-chat-window></app-chat-window>
+      </div>
+    </div>
+
 </div>

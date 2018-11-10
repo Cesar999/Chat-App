@@ -31,7 +31,7 @@
         <form [formGroup]="roomForm" class="form-group"
             (ngSubmit)="onAddRoom()">
         <input class="form-control" id="new-room" formControlName="room">
-        <button class="btn btn-primary" type="submit">New
+        <button [disabled]="!roomForm.valid" class="btn btn-primary" type="submit">New
             <i class="fas fa-plus-circle"></i>
         </button>
         </form>
@@ -47,7 +47,7 @@
             <option *ngFor="let c of contactlist" [value]="c.username">{{c.username}}</option>
         </select>
         <hr>
-        <button class="btn btn-primary" type="submit">Add
+        <button [disabled]="!inviteForm.valid" class="btn btn-primary" type="submit">Add
             <i class="fas fa-user-plus"></i>
         </button>
         </form>

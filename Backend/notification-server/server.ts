@@ -371,8 +371,8 @@ io.sockets.on('connection', (socket: ISocket) => {
    socket.on('seen message', (data) => {
       if (data.room) {
         Message.findById({_id: data.msg_id})
-        .then((m) => {
-          return m.seen.filter(u => u.username !== data.user);
+        .then((m: any) => {
+          return m.seen.filter((u: any) => u.username !== data.user);
         })
         .then((seen) => {
           // console.log(seen);
@@ -513,6 +513,7 @@ function returnConversation(data: any, socket_nickname: any) {
 }
 
 async function findUserRooms(user: any) {
+  if (user) {
     const user_id = await User.findOne(user);
     const rooms = await Conversation.find({room: { $ne: null }, participants: { $in: [user_id._id] }})
     .populate({
@@ -529,6 +530,8 @@ async function findUserRooms(user: any) {
     });
 
     return await rooms;
+  }
+  return await [];
 }
 
 

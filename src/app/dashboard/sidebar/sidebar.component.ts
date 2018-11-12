@@ -44,9 +44,9 @@ export class SidebarComponent implements OnInit {
       'toRoom': new FormControl(null, [Validators.required])
     });
 
-    this.socket.listenList().subscribe(data => {
+    this.socket.listenList().subscribe((data: any) => {
       // console.log(data);
-      this.contactlist = data;
+      this.contactlist = this.sortContactList(data);
       this.dashboardService.setList(data);
     });
 
@@ -70,6 +70,28 @@ export class SidebarComponent implements OnInit {
       }
     });
 
+  }
+
+  sortContactList(data) {
+    const temp = data.sort(function (a, b) {
+      const nameA = a.username.toUpperCase();
+      const nameB = b.username.toUpperCase();
+      if (a.online < b.online) {
+        return 1;
+      }
+      if (a.online > b.online) {
+        return -1;
+      }
+
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+    });
+    return temp;
   }
 
   logOut() {
@@ -116,6 +138,7 @@ export class SidebarComponent implements OnInit {
   }
 
   onClick(c) {
+    localStorage.setItem('currentUser', c.username);
     this.appService.checkAuth().subscribe(
       (response) => {
         if (response['authorization'] === true ) {
@@ -205,6 +228,7 @@ export class SidebarComponent implements OnInit {
 
 onRoom(r) {
   // console.log(r);
+  localStorage.setItem('currentUser', r.room);
   this.dashboardService.listenContact(r);
   if (r.messages[r.messages.length - 1]) {
     if (r.messages[r.messages.length - 1].author.username !== localStorage.getItem('username')) {
@@ -287,6 +311,7 @@ checkSeenRoom(r) {
       return false;
   }
 }
+
 
 
 }// END CLASS

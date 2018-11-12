@@ -5,7 +5,7 @@
 
 .btn-logout{
   float: right;
-  margin-top: 5%;
+  margin-top: 7%;
 }
 
 .mainBar{
@@ -17,6 +17,7 @@
 
 .margins{
   margin: 0% 2% 0% 2%;
+  min-width: 320px;
 }
 .chat, .sidebar{
   display: inline-block;
@@ -39,10 +40,10 @@
     display: flex;
     width: 90%;
     margin: 3% 2% 3% 2%;
+    min-width: 300px!important;
   }
   .dash{
     margin: 3% 2% 3% 2%;
   }
 }
-
 

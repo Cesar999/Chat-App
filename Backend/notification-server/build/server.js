@@ -671,7 +671,9 @@ function findUserRooms(user) {
         var user_id, rooms;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, User.findOne(user)];
+                case 0:
+                    if (!user) return [3 /*break*/, 4];
+                    return [4 /*yield*/, User.findOne(user)];
                 case 1:
                     user_id = _a.sent();
                     return [4 /*yield*/, Conversation.find({ room: { $ne: null }, participants: { $in: [user_id._id] } })
@@ -691,6 +693,8 @@ function findUserRooms(user) {
                     rooms = _a.sent();
                     return [4 /*yield*/, rooms];
                 case 3: return [2 /*return*/, _a.sent()];
+                case 4: return [4 /*yield*/, []];
+                case 5: return [2 /*return*/, _a.sent()];
             }
         });
     });

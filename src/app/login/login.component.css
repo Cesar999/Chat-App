@@ -19,9 +19,35 @@ span.alert{
 .logo{
   font-size: 2rem;
   color: #007bff;
+  display: inline-block;
+  margin-left: 15%;
 }
+@media only screen and (max-width: 600px) {
+  .logo{
+    margin-left: 5%;
+    display: block;
+  }
+}
+
 
 .logo i{
   font-size: 3rem;
   color: #007bff;
+}
+
+.language{
+  float: right;
+  /* color: #007bff; */
+}
+@media only screen and (max-width: 600px) {
+  .language{
+    float: none;
+  }
+}
+
+.language i {
+  font-size: 1.8rem;
+}
+.language option{
+  font-size: 0.8rem;
 }

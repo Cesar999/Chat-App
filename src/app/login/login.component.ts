@@ -15,6 +15,9 @@ export class LoginComponent implements OnInit {
   show_msg = false;
   msg: string;
 
+  languages = [{o: 'English', v: 'EN'}, {o: 'Française', v: 'FR'}, {o: 'Español', v: 'ES'}];
+  selectedOption = {o: 'English', v: 'EN'};
+
   constructor(private appService: AppService, private cookieService: CookieService, private router: Router) { }
 
   ngOnInit() {

@@ -16,6 +16,8 @@ export class RegisterComponent implements OnInit {
   invalidPass = false;
   invalidUser = false;
   timer = null;
+  languages = [{o: 'English', v: 'EN'}, {o: 'Française', v: 'FR'}, {o: 'Español', v: 'ES'}];
+  selectedOption = {o: 'English', v: 'EN'};
 
   constructor(private appService: AppService, private router: Router) { }
 
@@ -23,7 +25,8 @@ export class RegisterComponent implements OnInit {
     this.projectForm = new FormGroup({
       'username': new FormControl(null, [Validators.required]),
       'password': new FormControl(null, [Validators.required]),
-      'password2': new FormControl(null, [Validators.required])
+      'password2': new FormControl(null, [Validators.required]),
+      'customLanguage': new FormControl(null, [Validators.required])
     }, [CustomValidators.ValidatePasswords]);
   }
 

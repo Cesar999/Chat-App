@@ -25,3 +25,15 @@
   font-size: 3rem;
   color: #007bff;
 }
+
+.language{
+  margin-top: -50px;
+  float: right;
+  /* color: #007bff; */
+}
+.language i {
+  font-size: 1.8rem;
+}
+.language option{
+  font-size: 0.8rem;
+}

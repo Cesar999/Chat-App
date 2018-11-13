@@ -3,6 +3,17 @@
     <div class="col-lg-3"></div>
     <div class="col-lg-6 box">
         <span class='logo'><i class="fas fa-rocket"></i> Rocket Chat</span>
+
+        <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+            <div class="language">
+                <i class="fas fa-language"></i>
+                <select  formControlName="customLanguage" class="form-control" [value]='selectedOption.v'>
+                    <option *ngFor="let l of languages" [value]="l.v">
+                    {{l.o}}
+                    </option>
+                </select>
+              </div>
+        </form>
         <br>
         <hr>
       <form [formGroup]="projectForm" class="form-group" (ngSubmit)="onSubmit()">

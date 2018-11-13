@@ -3,6 +3,34 @@
   <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
 <!-- Login Component Begins-->
+
+      <trans-unit id="login-e1" datatype="html">
+        <source>Error Try Again</source>
+        <target>Error Try Again</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="login-e2" datatype="html">
+        <source>Wrong password</source>
+        <target>Wrong password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="login-e3" datatype="html">
+        <source>User does not exist</source>
+        <target>User does not exist</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+
       <trans-unit id="login-username" datatype="html">
         <source>Username</source>
         <target>Username</target>
@@ -103,6 +131,24 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
+
+      <trans-unit id="register-alert1" datatype="html">
+        <source>Username already exists</source>
+         <target>Username already exists</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="register-alert2" datatype="html">
+        <source>Registration Successfully</source>
+         <target>Registration Successfully</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
 <!-- Register Component Ends-->
 
 <!--Dashboard Component Begins-->
@@ -126,7 +172,7 @@
         </context-group>
       </trans-unit>
 
-      <trans-unit id="sidebar-btn_contactss" datatype="html"> 
+      <trans-unit id="sidebar-btn_contacts" datatype="html"> 
         <source>Contacts</source>
         <target>Contacts</target>
         <context-group purpose="location">

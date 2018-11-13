@@ -24,7 +24,8 @@ mongoose_1.default.set('useCreateIndex', true);
 var Schema = mongoose_1.default.Schema;
 var userSchema = new Schema({
     username: { type: String, require: true, unique: true },
-    password: { type: String, require: true }
+    password: { type: String, require: true },
+    language: { type: String }
 });
 var User = mongoose_1.default.model('User', userSchema);
 // --------- MONGOOSE END --------------------------------
@@ -81,7 +82,7 @@ app.post('/login', function (req, res) {
                     if (result) {
                         var payload = { username: user.username, _id: user._id };
                         var token = jsonwebtoken_1.default.sign(payload, jwtOptions.secretOrKey, { expiresIn: '36000s' });
-                        res.send({ token: token, username: user.username });
+                        res.send({ token: token, username: user.username, language: user.language });
                     }
                     else {
                         res.send({ msg: 'Wrong password' });
@@ -99,7 +100,7 @@ app.post('/login', function (req, res) {
 app.post('/register', function (req, res) {
     var name = req.body.username;
     var pass = req.body.password;
-    console.log(name, pass);
+    console.log(req.body);
     User.findOne({ username: name })
         .then(function (user) {
         if (user) {
@@ -110,11 +111,12 @@ app.post('/register', function (req, res) {
                 bcrypt_1.default.hash(pass, salt, function (error, hashedPass) {
                     var user1 = new User({
                         username: name,
-                        password: hashedPass
+                        password: hashedPass,
+                        language: req.body.customLanguage
                     });
                     user1.save()
                         .then(function () {
-                        res.send({ msg: 'Registration Succesfully', flag: true });
+                        res.send({ msg: 'Registration Successfully', flag: true });
                     })
                         .then(function () {
                         User.findOne({ username: user1.username })

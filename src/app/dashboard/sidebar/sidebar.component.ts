@@ -281,8 +281,10 @@ onLeaveRoom(r) {
 }
 
 checkSeen(c) {
-  // console.log(c);
   if (c.last_msg) {
+    if (localStorage.getItem('currentUser') === c.username) {
+      return false;
+    }
     if (c.last_msg.author.username !== localStorage.getItem('username')) {
       return c.last_msg.seen.length > 0;
     }

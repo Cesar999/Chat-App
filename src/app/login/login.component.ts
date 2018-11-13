@@ -25,6 +25,11 @@ export class LoginComponent implements OnInit {
       'username': new FormControl(null, [Validators.required]),
       'password': new FormControl(null, [Validators.required])
     });
+
+    if (localStorage.getItem('username') !== null) {
+      this.router.navigate(['/dashboard']);
+    }
+  
   }
 
   onSubmit() {
@@ -36,8 +41,9 @@ export class LoginComponent implements OnInit {
           this.cookieService.set( 'TOKEN', response['token']);
           this.cookieValue = this.cookieService.get('TOKEN');
           console.log(this.cookieValue);
+          localStorage.setItem('locale', response['language']);
           localStorage.setItem('username', response['username']);
-          this.router.navigate(['/dashboard']);
+          window.location.reload();
         } else {
           this.msg = response['msg'];
           this.show_msg = true;
@@ -64,6 +70,7 @@ export class LoginComponent implements OnInit {
     if (lang === 'es') {
       localStorage.setItem('locale', 'es');
     }
+
     window.location.reload();
   }
 

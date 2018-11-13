@@ -20,7 +20,11 @@
           <span i18n="@@login-username">Username</span> 
           </label>
           <input class="form-control" id="username" formControlName="username">
-          <span class='alert' *ngIf="show_msg">{{msg}}</span>
+          <span class='alert' *ngIf="show_msg">
+            <span  i18n="@@login-e1" *ngIf="msg === 'Error Try Again'">Error Try Again</span>
+            <span i18n="@@login-e2" *ngIf="msg === 'Wrong password'">Wrong password</span>
+            <span i18n="@@login-e3" *ngIf="msg === 'User does not exist'">User does not exist</span>
+          </span>
           <br>
           <label for="password"> <i class="fas fa-key"></i>&nbsp;
            <span i18n="@@login-password">Password</span>

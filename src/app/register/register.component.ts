@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 import {CustomValidators} from '../custom-validators';
@@ -18,6 +18,8 @@ export class RegisterComponent implements OnInit {
   timer = null;
   languages = [{o: 'English', v: 'en'}, {o: 'Française', v: 'fr'}, {o: 'Español', v: 'es'}];
   selectedOption = localStorage.getItem('locale');
+  @ViewChild('alert1') private myAlert1: ElementRef;
+  @ViewChild('alert2') private myAlert2: ElementRef;
 
   constructor(private appService: AppService, private router: Router) { }
 
@@ -26,7 +28,7 @@ export class RegisterComponent implements OnInit {
       'username': new FormControl(null, [Validators.required]),
       'password': new FormControl(null, [Validators.required]),
       'password2': new FormControl(null, [Validators.required]),
-      'customLanguage': new FormControl(null, [Validators.required])
+      'customLanguage': new FormControl(this.selectedOption)
     }, [CustomValidators.ValidatePasswords]);
   }
 
@@ -50,10 +52,11 @@ export class RegisterComponent implements OnInit {
       (response) => {
         console.log(response['flag']);
         if (response['flag']) {
-          alert(response['msg']);
+          alert(this.myAlert2.nativeElement.innerHTML);
           this.router.navigate(['/login']);
         } else {
-          alert(response['msg']);
+          console.log(this.myAlert1);
+          alert(this.myAlert1.nativeElement.innerHTML);
         }
       },
       (error) => console.log(error)

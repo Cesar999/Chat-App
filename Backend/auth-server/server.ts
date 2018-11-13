@@ -17,7 +17,8 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     username: {type: String, require: true, unique: true},
-    password: {type: String, require: true }
+    password: {type: String, require: true },
+    language:  {type: String}
 });
 
 const User = mongoose.model('User', userSchema);
@@ -94,7 +95,7 @@ app.post('/login', (req, res) => {
                     if (result) {
                         const payload = {username: user.username, _id: user._id};
                         const token = jwt.sign(payload, jwtOptions.secretOrKey,  {expiresIn: '36000s'});
-                        res.send({token, username: user.username });
+                        res.send({token, username: user.username, language: user.language});
                     } else {
                         res.send({msg: 'Wrong password'});
                     }
@@ -111,7 +112,7 @@ app.post('/login', (req, res) => {
   app.post('/register', (req, res) => {
     const name = req.body.username;
     const pass = req.body.password;
-    console.log(name, pass);
+    console.log(req.body);
     User.findOne({username: name})
     .then((user) => {
         if (user) {
@@ -121,10 +122,11 @@ app.post('/login', (req, res) => {
                 bcrypt.hash(pass, salt, (error, hashedPass) => {
                     const user1: any = new User({
                         username: name,
-                        password:  hashedPass});
+                        password:  hashedPass,
+                        language: req.body.customLanguage});
                     user1.save()
                     .then(() => {
-                        res.send({msg: 'Registration Succesfully', flag: true});
+                        res.send({msg: 'Registration Successfully', flag: true});
                     })
                     .then(() => {
                         User.findOne({username: user1.username})

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+<!-- Login Component Begins-->
+      <trans-unit id="login-username" datatype="html">
+        <source>Username</source>
+        <target>Nombre de usuario</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="login-password" datatype="html">
+        <source>Password</source>
+        <target>Contraseña</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="login-login" datatype="html">
+        <source>Login</source>
+         <target>Iniciar Sesion</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="login-not_account" datatype="html">
+        <source>Don&apos;t have an account? </source>
+         <target>No tienes una cuenta?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="login-create" datatype="html">
+        <source>Create One</source>
+        <target>Crea una</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/login/login.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+<!-- Login Component Ends-->
+
+<!-- Register Component Begins-->
+<trans-unit id="register-username" datatype="html">
+        <source>Username</source>
+        <target>Nombre de usuario</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="register-alert_already" datatype="html">
+        <source>Username already exists</source>
+         <target>Usuario ya existe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="register-password" datatype="html">
+        <source>Password</source>
+         <target>Contraseña</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="register-confirm_password" datatype="html">
+        <source> Confirm Password </source>
+         <target>Confirmar Contraseña</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="register-alert_match" datatype="html">
+        <source>Passwords don&apos;t match</source>
+         <target>Contraseñas no son iguales</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="register-register" datatype="html">
+        <source>Register</source>
+         <target>Registrarse</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/register/register.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+<!-- Register Component Ends-->
+
+<!--Dashboard Component Begins-->
+      <trans-unit id="dashboard-logout" datatype="html">
+        <source>Logout</source>
+         <target>Cerrar sesion</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+<!--Dashboard Component Ends-->
+
+<!--Sidebar Component Begins-->
+
+      <trans-unit id="sidebar-btn_rooms" datatype="html"> 
+        <source>Rooms</source>
+        <target>Salas</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="sidebar-btn_contactss" datatype="html"> 
+        <source>Contacts</source>
+        <target>Contactos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="sidebar-add" datatype="html"> 
+        <source>Add</source>
+        <target>Agregar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="sidebar-contacts" datatype="html">
+        <source>Contacts</source>
+        <target>Contactos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="sidebar-new" datatype="html">
+        <source>New</source>
+        <target>Nuevo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="sidebar-addr" datatype="html">
+        <source>Add</source>
+        <target>Agregar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="sidebar-rooms" datatype="html">
+        <source>Rooms</source>
+        <target>Salas</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="sidebar-leave" datatype="html">
+        <source>Leave</source>
+        <target>Salir</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+<!--Sidebar Component Ends-->
+
+<!--Chat Component begins-->
+      <trans-unit id="chat-to" datatype="html">
+        <source> to </source>
+        <target> para </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/chat-window/chat-window.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="chat-send" datatype="html">
+        <source>Send</source>
+        <target>Enviar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/chat-window/chat-window.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>      
+<!--Chat Component Ends-->
+    </body>
+  </file>
+</xliff>

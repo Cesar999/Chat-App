@@ -6,7 +6,7 @@
        <span class='logo'><i class="fas fa-rocket"></i> Rocket Chat</span> &nbsp;
         <span class="language">
           <i class="fas fa-language"></i>
-            <select class="form-control" [value]='selectedOption.v'>
+            <select class="form-control" [value]='selectedOption' (change)="onChangeLanguage($event)">
                 <option *ngFor="let l of languages" [value]="l.v">
                   {{l.o}}
                 </option>
@@ -16,17 +16,25 @@
       <hr>
       <form [formGroup]="projectForm" class="form-group"
       (ngSubmit)="onSubmit()">
-          <label for="username"><i class="fas fa-user-tag"></i> Username </label>
+          <label for="username"><i class="fas fa-user-tag"></i>&nbsp;
+          <span i18n="@@login-username">Username</span> 
+          </label>
           <input class="form-control" id="username" formControlName="username">
           <span class='alert' *ngIf="show_msg">{{msg}}</span>
           <br>
-          <label for="password"> <i class="fas fa-key"></i> Password </label>
+          <label for="password"> <i class="fas fa-key"></i>&nbsp;
+           <span i18n="@@login-password">Password</span>
+           </label>
           <input class="form-control" id="password" formControlName="password" type="password">
           <br>
-        <button class="btn btn-primary btn-login btn-lg" type="submit" [disabled]="!projectForm.valid">Login</button>
+        <button class="btn btn-primary btn-login btn-lg" type="submit" [disabled]="!projectForm.valid">
+         <span i18n="@@login-login">Login</span>
+         </button>
       </form>
       <hr>
-      <span>Don't have an account? </span><a routerLink="/register">Create One</a>
+      <span i18n="@@login-not_account">Don't have an account? </span>
+      &nbsp;
+      <a i18n="@@login-create"routerLink="/register">Create One</a>
     </div>
     <div class="col-lg-3"></div>
   </div>

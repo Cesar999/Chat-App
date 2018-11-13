@@ -7,7 +7,7 @@
         <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
             <div class="language">
                 <i class="fas fa-language"></i>
-                <select  formControlName="customLanguage" class="form-control" [value]='selectedOption.v'>
+                <select (change)="onChangeLanguage($event)" formControlName="customLanguage" class="form-control" [value]='selectedOption'>
                     <option *ngFor="let l of languages" [value]="l.v">
                     {{l.o}}
                     </option>
@@ -17,18 +17,25 @@
         <br>
         <hr>
       <form [formGroup]="projectForm" class="form-group" (ngSubmit)="onSubmit()">
-          <label for="username"><i class="fas fa-user-tag"></i> Username</label>
+          <label for="username"><i class="fas fa-user-tag"></i>&nbsp; <span i18n="@@register-username">Username</span>
+          </label>
           <input class="form-control" id="username" formControlName="username">
-          <span class="alert" *ngIf="invalidUser&&projectForm.get('username').dirty">Username already exists</span>
+          <span i18n="@@register-alert_already" class="alert" *ngIf="invalidUser&&projectForm.get('username').dirty">Username already exists</span>
           <br>
-          <label for="password"><i class="fas fa-key"></i> Password</label>
+          <label for="password"><i class="fas fa-key"></i> &nbsp;
+          <span i18n="@@register-password">Password</span>
+          </label>
           <input class="form-control" id="password" formControlName="password" type="password">
           <br>
-          <label for="password2"><i class="fas fa-key"></i> Confirm Password</label>
+          <label for="password2"><i class="fas fa-key"></i>&nbsp;
+          <span i18n="@@register-confirm_password"> Confirm Password </span>
+          </label>
           <input class="form-control" id="password2" formControlName="password2" (input)="onChange()" type="password">
-          <span class="alert" *ngIf="invalidPass&&projectForm.get('password2').dirty">Passwords don't match</span>
+          <span i18n="@@register-alert_match" class="alert" *ngIf="invalidPass&&projectForm.get('password2').dirty">Passwords don't match</span>
           <br>
-        <button [disabled]="!projectForm.valid" class="btn btn-primary btn-login btn-lg" type="submit">Register</button>
+        <button [disabled]="!projectForm.valid" class="btn btn-primary btn-login btn-lg" type="submit">
+        <span i18n="@@register-register">Register</span>
+        </button>
       </form>
     </div>
     <div class="col-lg-3"></div>

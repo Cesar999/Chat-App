@@ -15,8 +15,8 @@ export class LoginComponent implements OnInit {
   show_msg = false;
   msg: string;
 
-  languages = [{o: 'English', v: 'EN'}, {o: 'Française', v: 'FR'}, {o: 'Español', v: 'ES'}];
-  selectedOption = {o: 'English', v: 'EN'};
+  languages = [{o: 'English', v: 'en'}, {o: 'Française', v: 'fr'}, {o: 'Español', v: 'es'}];
+  selectedOption = localStorage.getItem('locale');
 
   constructor(private appService: AppService, private cookieService: CookieService, private router: Router) { }
 
@@ -49,6 +49,22 @@ export class LoginComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  onChangeLanguage(event) {
+    const lang = event.target.value;
+    if (lang === 'fr') {
+      localStorage.setItem('locale', 'fr');
+    }
+
+    if (lang === 'en') {
+      localStorage.setItem('locale', 'en');
+    }
+
+    if (lang === 'es') {
+      localStorage.setItem('locale', 'es');
+    }
+    window.location.reload();
   }
 
 }

@@ -1,6 +1,9 @@
 <div class="wrapper" >
 
-<button class='btn btn-info btn-rooms' (click)='toggleRooms()'>{{tag_btn}}</button>
+<button class='btn btn-info btn-rooms' (click)='toggleRooms()'>
+    <span i18n="@@sidebar-btn_rooms" *ngIf="tag_btn === 'Rooms'">Rooms</span>
+    <span i18n="@@sidebar-btn_contacts"  *ngIf="tag_btn === 'Contacts'">Contacts</span>
+</button>
 <span class='custom_alert'>
   <span *ngIf="show_msg">{{msg}}</span>&nbsp;
 </span>
@@ -9,14 +12,17 @@
       <form [formGroup]="contactForm" class="form-group"
       (ngSubmit)="onAdd()">
         <input class="form-control" id="send-message" formControlName="contact">
-        <button class="btn btn-primary" type="submit">Add
+        <button class="btn btn-primary" type="submit">
+            <span i18n="@@sidebar-add">Add</span>&nbsp;
             <i class="fas fa-user-plus"></i>
         </button>
     </form>
   </div>
 
     <div *ngIf="roomFlag" id="contact-list" >
-    <h3 class='title-list'>Contacts <i class="fas fa-user-friends"></i></h3>
+    <h3 class='title-list'>
+        <span i18n="@@sidebar-contacts">Contacts</span> &nbsp;
+    <i class="fas fa-user-friends"></i></h3>
 
     <div class="overflow_container">
         <div *ngFor="let c of contactlist" class='btns-box'>
@@ -38,7 +44,8 @@
         <form [formGroup]="roomForm" class="form-group"
             (ngSubmit)="onAddRoom()">
         <input class="form-control" id="new-room" formControlName="room">
-        <button [disabled]="!roomForm.valid" class="btn btn-primary" type="submit">New
+        <button [disabled]="!roomForm.valid" class="btn btn-primary" type="submit">
+            <span i18n="@@sidebar-new">New</span>&nbsp;
             <i class="fas fa-plus-circle"></i>
         </button>
         </form>
@@ -54,14 +61,17 @@
             <option *ngFor="let c of contactlist" [value]="c.username">{{c.username}}</option>
         </select>
         <hr>
-        <button [disabled]="!inviteForm.valid" class="btn btn-primary" type="submit">Add
+        <button [disabled]="!inviteForm.valid" class="btn btn-primary" type="submit">
+        <span i18n="@@sidebar-addr">Add</span>&nbsp;
             <i class="fas fa-user-plus"></i>
         </button>
         </form>
     </div>
 
     <div *ngIf="!roomFlag" id="room-list">
-        <h3 class='title-list'>Rooms <i class="fas fa-comments"></i></h3>
+        <h3 class='title-list'>
+        <span i18n="@@sidebar-rooms">Rooms</span>&nbsp;
+         <i class="fas fa-comments"></i></h3>
     <div>
 
     <div>
@@ -71,7 +81,7 @@
             <i *ngIf='checkSeenRoom(r)' class="far fa-envelope"></i>
         </button>
         <button (click)='onLeaveRoom(r)' class="btn btn-danger delete-btn">
-          Leave
+          <span i18n="@@sidebar-leave">Leave</span>
         </button>
     </div>
     </div>

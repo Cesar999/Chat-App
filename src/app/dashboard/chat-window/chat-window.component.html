@@ -1,7 +1,8 @@
 <div class="wrapper">
   <div #scrollMe id="message-chat">
     <h3 class='sticky'>
-      <span class='main-user'>{{mainUser}}</span> to
+      <span class='main-user'>{{mainUser}}</span>
+      <span i18n="@@chat-to"> to </span>
       <span class='contact'>{{currentUser}}</span>
     </h3>
     <hr>
@@ -18,7 +19,8 @@
       (ngSubmit)="onSend()">
         <input class="form-control" id="send-message" formControlName="message" autocomplete="off">
         <button class="btn btn-primary"
-        [disabled]="!(!(this.messageForm.invalid)&&(currentUser!=='none'))" type="submit">Send
+        [disabled]="!(!(this.messageForm.invalid)&&(currentUser!=='none'))" type="submit">
+        <span i18n="@@chat-send">Send</span> &nbsp;
           <i class="fas fa-envelope"></i>
         </button>
     </form>

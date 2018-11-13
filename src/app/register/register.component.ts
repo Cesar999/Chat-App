@@ -16,8 +16,8 @@ export class RegisterComponent implements OnInit {
   invalidPass = false;
   invalidUser = false;
   timer = null;
-  languages = [{o: 'English', v: 'EN'}, {o: 'Française', v: 'FR'}, {o: 'Español', v: 'ES'}];
-  selectedOption = {o: 'English', v: 'EN'};
+  languages = [{o: 'English', v: 'en'}, {o: 'Française', v: 'fr'}, {o: 'Español', v: 'es'}];
+  selectedOption = localStorage.getItem('locale');
 
   constructor(private appService: AppService, private router: Router) { }
 
@@ -58,6 +58,22 @@ export class RegisterComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  onChangeLanguage(event) {
+    const lang = event.target.value;
+    if (lang === 'fr') {
+      localStorage.setItem('locale', 'fr');
+    }
+
+    if (lang === 'en') {
+      localStorage.setItem('locale', 'en');
+    }
+
+    if (lang === 'es') {
+      localStorage.setItem('locale', 'es');
+    }
+    window.location.reload();
   }
 
 }

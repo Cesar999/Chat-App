@@ -2,7 +2,7 @@
   text-align: center;
   /* border: 2px solid black; */
   padding: 3%;
-  margin-top: 3%;
+  margin-top: 2%;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -30,6 +30,12 @@
   margin-top: -50px;
   float: right;
   /* color: #007bff; */
+}
+@media only screen and (max-width: 600px) {
+  .language{
+    float: none;
+    margin-top: 0;
+  }
 }
 .language i {
   font-size: 1.8rem;

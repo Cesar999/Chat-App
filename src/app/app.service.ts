@@ -19,7 +19,6 @@ export class AppService {
     return this.http.post('http://localhost:3000/register', user);
  }
 
-
  checkAuth() {
   this.httpOptions = {
     headers: new HttpHeaders({

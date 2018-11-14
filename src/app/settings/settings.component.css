@@ -10,3 +10,9 @@
 .settings_title{
     font-size: 2rem;
 }
+.icon{
+  font-size: 1.5rem;
+}
+span.alert{
+  color: red
+}

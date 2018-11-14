@@ -145,3 +145,55 @@ app.get('/check-auth', passport_1.default.authenticate('jwt', { session: false }
     console.log('Authorization Accessed');
     res.send({ 'authorization': true });
 });
+app.post('/change-password', function (req, res) {
+    console.log('Change Password', req.body);
+    var name = req.body.username;
+    var pass = req.body.old_password;
+    var new_pass = req.body.password;
+    User.findOne({ username: name })
+        .then(function (user) {
+        if (user) {
+            bcrypt_1.default.compare(pass, user.password, function (err, result) {
+                if (err) {
+                    res.send({ msg: 'Error Try Again' });
+                }
+                else {
+                    if (result) {
+                        bcrypt_1.default.genSalt(10, function (error, salt) {
+                            bcrypt_1.default.hash(new_pass, salt, function (error2, hashedPass) {
+                                User.findOneAndUpdate({ _id: user._id }, { $set: { 'password': hashedPass } })
+                                    .then(function (u) {
+                                    // console.log(u, 'test');
+                                    res.send({ msg: 'Change Successfully' });
+                                });
+                            });
+                        });
+                    }
+                    else {
+                        res.send({ msg: 'Wrong password' });
+                    }
+                }
+            });
+        }
+        else {
+            res.send({ msg: 'User does not exist' });
+        }
+    }).catch(function (e) {
+        console.log('Login Catch');
+    });
+});
+app.post('/change-language', function (req, res) {
+    console.log('Language', req.body);
+    if (req.body.username) {
+        User.findOneAndUpdate({ username: req.body.username }, { $set: { 'language': req.body.customLanguage } })
+            .then(function (u) {
+            res.send({ msg: 'Change Successfully', lang: req.body.customLanguage });
+        })
+            .catch(function (e) {
+            console.log('Change language Catch');
+        });
+    }
+    else {
+        res.send({ msg: 'Error' });
+    }
+});

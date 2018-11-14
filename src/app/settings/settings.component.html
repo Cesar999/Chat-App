@@ -10,7 +10,8 @@
     </span>
       <br>
       <input #change_language type="radio" id="change_language"  name="option" (change)="onSelectionChange($event)"/>
-      <label for="change_language">&nbsp;Change Language</label><br/>
+      <label for="change_language">&nbsp;Change Language</label>
+      &nbsp; &nbsp;
       <input #change_password type="radio" id="change_password"  name="option" (change)="onSelectionChange($event)"/>
       <label for="change_password">&nbsp;Change Password</label>
 
@@ -19,13 +20,16 @@
       <div *ngIf="showLanguage">
         <form [formGroup]="changeLanguageForm" (ngSubmit)="onSubmitLanguage()">
             <div class="language">
-                <i class="fas fa-language"></i>
+                <span class='icon'><i class="fas fa-language"></i></span>
                 <select formControlName="customLanguage" class="form-control" [value]='selectedOption'>
                     <option *ngFor="let l of languages" [value]="l.v">
                     {{l.o}}
                     </option>
                 </select>
               </div>
+              <br>
+              <span class='alert' *ngIf="show_msg">{{msg}}</span>
+              <br>
               <br>
             <button [disabled]="!changeLanguageForm.valid" class="btn btn-primary" type="submit">
               <span>Change Language</span>
@@ -49,6 +53,8 @@
             </label>
             <input class="form-control" id="password2" formControlName="password2" (input)="onChange()" type="password">
             <span class="alert" *ngIf="invalidPass&&changePassForm.get('password2').dirty">Passwords don't match</span>
+            <span class='alert' *ngIf="show_msg">{{msg}}</span>
+            <br>
             <br>
           <button [disabled]="!changePassForm.valid" class="btn btn-primary" type="submit">
           <span>Change Password</span>

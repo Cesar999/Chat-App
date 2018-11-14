@@ -159,3 +159,54 @@ app.get('/check-auth', passport.authenticate('jwt', { session: false }), functio
     res.send({'authorization': true});
 });
 
+app.post('/change-password', function(req, res) {
+  console.log('Change Password', req.body);
+  const name = req.body.username;
+  const pass = req.body.old_password;
+  const new_pass = req.body.password;
+  User.findOne({username: name})
+  .then((user: any) => {
+      if (user) {
+          bcrypt.compare(pass, user.password, (err, result) => {
+              if (err) {
+                  res.send({msg: 'Error Try Again'});
+              } else {
+                  if (result) {
+                    bcrypt.genSalt(10, (error, salt) => {
+                      bcrypt.hash(new_pass, salt, (error2, hashedPass) => {
+                        User.findOneAndUpdate({_id: user._id}, { $set: {'password': hashedPass}})
+                        .then((u) => {
+                          // console.log(u, 'test');
+                          res.send({msg: 'Change Successfully'});
+                        });
+                      });
+                    });
+                  } else {
+                      res.send({msg: 'Wrong password'});
+                  }
+              }
+          });
+      } else {
+          res.send({msg: 'User does not exist'});
+      }
+  }).catch((e) => {
+    console.log('Login Catch');
+  });
+});
+
+app.post('/change-language', function(req, res) {
+  console.log('Language', req.body);
+  if (req.body.username) {
+    User.findOneAndUpdate({username: req.body.username}, { $set: {'language': req.body.customLanguage}})
+    .then((u) => {
+      res.send({msg: 'Change Successfully', lang: req.body.customLanguage});
+     })
+     .catch((e) => {
+      console.log('Change language Catch');
+    });
+  } else {
+    res.send({msg: 'Error'});
+  }
+
+});
+

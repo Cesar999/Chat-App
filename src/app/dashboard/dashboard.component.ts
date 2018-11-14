@@ -13,7 +13,8 @@ export class DashboardComponent implements OnInit {
 
   mainUser: string;
 
-  constructor(private router: Router, private cookieService: CookieService, private socket: WebsocketService, private appService: AppService) { }
+  constructor(private router: Router, private cookieService: CookieService, private socket: WebsocketService,
+    private appService: AppService) { }
 
   ngOnInit() {
  this.appService.checkAuth().subscribe(

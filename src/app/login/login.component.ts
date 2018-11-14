@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit {
     if (localStorage.getItem('username') !== null) {
       this.router.navigate(['/dashboard']);
     }
-  
   }
 
   onSubmit() {

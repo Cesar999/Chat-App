@@ -53,14 +53,14 @@ changePassForm: FormGroup;
   onSubmitLanguage() {}
 
   onSelectionChange(event) {
-    if(event.target.id === 'change_language'){
+    if (event.target.id === 'change_language') {
       this.showLanguage = true;
       this.showPass = false;
     }
-    if(event.target.id === 'change_password'){
+    if (event.target.id === 'change_password') {
       this.showLanguage = false;
       this.showPass = true;
-    }    
+    }
   }
 
   onBack() {

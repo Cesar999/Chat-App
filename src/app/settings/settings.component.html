@@ -20,7 +20,7 @@
         <form [formGroup]="changeLanguageForm" (ngSubmit)="onSubmitLanguage()">
             <div class="language">
                 <i class="fas fa-language"></i>
-                <select (change)="onChangeLanguage($event)" formControlName="customLanguage" class="form-control" [value]='selectedOption'>
+                <select formControlName="customLanguage" class="form-control" [value]='selectedOption'>
                     <option *ngFor="let l of languages" [value]="l.v">
                     {{l.o}}
                     </option>
@@ -38,7 +38,6 @@
             <label for="old_password"><i class="fas fa-user-tag"></i>&nbsp; <span>Current Password</span>
             </label>
             <input class="form-control" id="old_password" formControlName="old_password">
-            <span class="alert" *ngIf="invalidUser&&changePassForm.get('old_password').dirty">Username already exists</span>
             <br>
             <label for="password"><i class="fas fa-key"></i> &nbsp;
             <span>New Password</span>

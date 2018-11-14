@@ -4,8 +4,11 @@ import mongoose from 'mongoose';
 import axios from 'axios';
 import socket from 'socket.io';
 
+const url_auth = 'http://localhost:3000';
+const url_mongo = 'mongodb://localhost';
+
 // START MONGOOSE---------------------------------------
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/zchat-project-notification-1', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || url_mongo + '/zchat-project-notification-1', { useNewUrlParser: true });
 
 const Schema = mongoose.Schema;
 
@@ -91,7 +94,7 @@ app.use((req, res, next) => {
             authorization: req.headers.authorization,
         }
       };
-    axios.get('http://localhost:3000/check-auth', config)
+    axios.get(url_auth + '/check-auth', config)
     .then(function (response) {
         console.log(response.data);
         res.send(response.data);

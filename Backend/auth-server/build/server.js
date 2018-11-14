@@ -18,8 +18,10 @@ var axios_1 = __importDefault(require("axios"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var passport_1 = __importDefault(require("passport"));
 var passport_jwt_1 = __importDefault(require("passport-jwt"));
+var url_noty = 'http://localhost:3001';
+var url_mongo = 'mongodb://localhost';
 // ---------- MONGOOSE -----------------------------------
-mongoose_1.default.connect(process.env.MONGODB_URI || 'mongodb://localhost/zchat-project-auth-1', { useNewUrlParser: true });
+mongoose_1.default.connect(process.env.MONGODB_URI || url_mongo + '/zchat-project-auth-1', { useNewUrlParser: true });
 mongoose_1.default.set('useCreateIndex', true);
 var Schema = mongoose_1.default.Schema;
 var userSchema = new Schema({
@@ -123,7 +125,7 @@ app.post('/register', function (req, res) {
                             .then(function (u) {
                             var temp = { _id: u._id, username: u.username };
                             console.log(temp);
-                            axios_1.default.post('http://localhost:3001/save-user', temp)
+                            axios_1.default.post(url_noty + '/save-user', temp)
                                 .then(function (response) { console.log(response.data); })
                                 .catch(function () { return console.log('Axios Catch'); });
                         });

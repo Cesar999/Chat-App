@@ -2,15 +2,18 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Subject, Observable } from 'rxjs';
 
+const url_noty = 'http://localhost:3001';
+const url_auth = '';
+
 @Injectable({
   providedIn: 'root'
 })
-
 export class WebsocketService {
+
   socket;
 
   constructor() {
-    this.socket = io('http://localhost:3001');
+    this.socket = io(url_noty);
   }
 
 

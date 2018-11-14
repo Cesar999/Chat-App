@@ -8,8 +8,11 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
 
+const url_noty = 'http://localhost:3001';
+const url_mongo = 'mongodb://localhost';
+
 // ---------- MONGOOSE -----------------------------------
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/zchat-project-auth-1', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || url_mongo + '/zchat-project-auth-1', { useNewUrlParser: true });
 
 mongoose.set('useCreateIndex', true);
 
@@ -133,7 +136,7 @@ app.post('/login', (req, res) => {
                         .then((u: any) => {
                             const temp = {_id: u._id, username: u.username};
                             console.log(temp);
-                            axios.post('http://localhost:3001/save-user', temp)
+                            axios.post(url_noty + '/save-user', temp)
                             .then((response: any) => {console.log(response.data); })
                             .catch(() => console.log('Axios Catch'));
                         });

@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
+const url_noty = 'http://localhost:3001';
+const url_auth = 'http://localhost:3000';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,11 +15,11 @@ export class AppService {
 
 // -------------------AUTH SERVICE--------------------------------
   postLoginUser(user: any) {
-     return this.http.post('http://localhost:3000/login', user);
+     return this.http.post(url_auth + '/login', user);
   }
 
   postRegisterUser(user: any) {
-    return this.http.post('http://localhost:3000/register', user);
+    return this.http.post(url_auth + '/register', user);
  }
 
  checkAuth() {
@@ -26,35 +29,35 @@ export class AppService {
       'Authorization': 'jwt ' + this.cookieService.get('TOKEN')
     })
   };
-  return this.http.get('http://localhost:3001/check-auth', this.httpOptions);
+  return this.http.get(url_noty + '/check-auth', this.httpOptions);
  }
 
  // --------------------------------------------------------------
 
  postAddContact(contact: any) {
-  return this.http.post('http://localhost:3001/add-contact', contact);
+  return this.http.post(url_noty + '/add-contact', contact);
   }
 
   getConversation(conv_id: any) {
-    return this.http.post('http://localhost:3001/conversation-id', conv_id);
+    return this.http.post(url_noty + '/conversation-id', conv_id);
   }
 
  // ------------------------------------------------------------------
 
  deleteContact(data: any) {
-  return this.http.post('http://localhost:3001/delete-contact', data);
+  return this.http.post(url_noty + '/delete-contact', data);
 }
 // ----------------------------------------------------------
  createRoom(data: any) {
-  return this.http.post('http://localhost:3001/create-room', data);
+  return this.http.post(url_noty + '/create-room', data);
 }
 
  getRooms(data: any) {
-  return this.http.post('http://localhost:3001/get-rooms', data);
+  return this.http.post(url_noty + '/get-rooms', data);
 }
 
  leaveRoom(data: any) {
-  return this.http.post('http://localhost:3001/leave-room', data);
+  return this.http.post(url_noty + '/leave-room', data);
 }
 
 }

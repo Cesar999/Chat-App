@@ -62,8 +62,10 @@ var bodyParser = __importStar(require("body-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var axios_1 = __importDefault(require("axios"));
 var socket_io_1 = __importDefault(require("socket.io"));
+var url_auth = 'http://localhost:3000';
+var url_mongo = 'mongodb://localhost';
 // START MONGOOSE---------------------------------------
-mongoose_1.default.connect(process.env.MONGODB_URI || 'mongodb://localhost/zchat-project-notification-1', { useNewUrlParser: true });
+mongoose_1.default.connect(process.env.MONGODB_URI || url_mongo + '/zchat-project-notification-1', { useNewUrlParser: true });
 var Schema = mongoose_1.default.Schema;
 var userSchema = new Schema({
     username: { type: String },
@@ -131,7 +133,7 @@ app.get('/check-auth', function (req, res) {
             authorization: req.headers.authorization,
         }
     };
-    axios_1.default.get('http://localhost:3000/check-auth', config)
+    axios_1.default.get(url_auth + '/check-auth', config)
         .then(function (response) {
         console.log(response.data);
         res.send(response.data);

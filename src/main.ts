@@ -9,8 +9,14 @@ if (environment.production) {
 }
 
 if (localStorage.getItem('locale') === null) {
-  localStorage.setItem('locale', 'en');
+  if(navigator.language.split('-')[0] === 'es'){
+    localStorage.setItem('locale', 'es');
+  } else {
+    localStorage.setItem('locale', 'en');
   }
+}
+
+  console.log(navigator.language.split('-')[0]);
 
   const locale = localStorage.getItem('locale');
   declare const require;

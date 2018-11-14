@@ -24,11 +24,13 @@
         <div class="col-4">
             <h1>{{mainUser}}</h1>
         </div>
-        <div class="col-5">
-        </div>
-        <div class="col-3">
+        <div class="col-8">
             <button class="btn btn-danger btn-logout" (click)="onLogout()">
-            <span i18n="@@dashboard-logout">Logout</span>
+                <span i18n="@@dashboard-logout">Logout</span>
+            </button>
+
+            <button class="btn btn-secondary" (click)="onSettings()">
+                <span i18n="@@dashboard-settings">Settings</span>
             </button>
         </div>
     </div>

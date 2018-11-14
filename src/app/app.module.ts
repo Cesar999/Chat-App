@@ -21,12 +21,14 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import { CookieService } from 'ngx-cookie-service';
 import { DatePipe } from './date.pipe';
+import { SettingsComponent } from './settings/settings.component';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
   { path: '**', component: LoginComponent }
 ];
 
@@ -38,7 +40,8 @@ const appRoutes: Routes = [
     DashboardComponent,
     ChatWindowComponent,
     SidebarComponent,
-    DatePipe
+    DatePipe,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

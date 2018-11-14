@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6 box">
+    <span>
+      <button class="btn btn-primary" type="submit" (click)="onBack()">
+        <span>Back</span>
+      </button>
+      <span class="btn settings_title">Settings</span>
+    </span>
+      <br>
+      <input #change_language type="radio" id="change_language"  name="option" (change)="onSelectionChange($event)"/>
+      <label for="change_language">&nbsp;Change Language</label><br/>
+      <input #change_password type="radio" id="change_password"  name="option" (change)="onSelectionChange($event)"/>
+      <label for="change_password">&nbsp;Change Password</label>
+
+      <hr>
+
+      <div *ngIf="showLanguage">
+        <form [formGroup]="changeLanguageForm" (ngSubmit)="onSubmitLanguage()">
+            <div class="language">
+                <i class="fas fa-language"></i>
+                <select (change)="onChangeLanguage($event)" formControlName="customLanguage" class="form-control" [value]='selectedOption'>
+                    <option *ngFor="let l of languages" [value]="l.v">
+                    {{l.o}}
+                    </option>
+                </select>
+              </div>
+              <br>
+            <button [disabled]="!changeLanguageForm.valid" class="btn btn-primary" type="submit">
+              <span>Change Language</span>
+            </button>
+        </form>
+      </div>
+
+      <div *ngIf="showPass">
+        <form [formGroup]="changePassForm" class="form-group" (ngSubmit)="onSubmitPassword()">
+            <label for="old_password"><i class="fas fa-user-tag"></i>&nbsp; <span>Current Password</span>
+            </label>
+            <input class="form-control" id="old_password" formControlName="old_password">
+            <span class="alert" *ngIf="invalidUser&&changePassForm.get('old_password').dirty">Username already exists</span>
+            <br>
+            <label for="password"><i class="fas fa-key"></i> &nbsp;
+            <span>New Password</span>
+            </label>
+            <input class="form-control" id="password" formControlName="password" type="password">
+            <br>
+            <label for="password2"><i class="fas fa-key"></i>&nbsp;
+            <span> Confirm New Password </span>
+            </label>
+            <input class="form-control" id="password2" formControlName="password2" (input)="onChange()" type="password">
+            <span class="alert" *ngIf="invalidPass&&changePassForm.get('password2').dirty">Passwords don't match</span>
+            <br>
+          <button [disabled]="!changePassForm.valid" class="btn btn-primary" type="submit">
+          <span>Change Password</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
+
+</div>

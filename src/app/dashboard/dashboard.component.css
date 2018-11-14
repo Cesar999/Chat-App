@@ -3,9 +3,9 @@
   min-width: 300px;
 }
 
-.btn-logout{
+.mainBar button{
+  margin: 2%;
   float: right;
-  margin-top: 7%;
 }
 
 .mainBar{
@@ -44,6 +44,9 @@
   }
   .dash{
     margin: 3% 2% 3% 2%;
+  }
+  .dash button{
+    margin: 1%;
   }
 }
 

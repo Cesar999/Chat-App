@@ -34,13 +34,18 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+onSettings() {
+  this.router.navigate(['/settings']);
+}
+
 onLogout() {
   this.cookieService.deleteAll();
   const temp = localStorage.getItem('locale');
   localStorage.clear();
-  localStorage.setItem('locale', temp);
+  // localStorage.setItem('locale', temp);
   this.socket.disconnectSocket();
-  this.router.navigate(['/login']);
+  // this.router.navigate(['/login']);
+  window.location.reload();
 }
 
 }

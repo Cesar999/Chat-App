@@ -148,7 +148,7 @@
           <context context-type="sourcefile">app/register/register.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-      </trans-unit>      
+      </trans-unit>
 <!-- Register Component Ends-->
 
 <!--Dashboard Component Begins-->
@@ -160,11 +160,20 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
+
+      <trans-unit id="dashboard-settings" datatype="html">
+        <source>Settings</source>
+         <target>Réglages</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
 <!--Dashboard Component Ends-->
 
 <!--Sidebar Component Begins-->
 
-      <trans-unit id="sidebar-btn_rooms" datatype="html"> 
+      <trans-unit id="sidebar-btn_rooms" datatype="html">
         <source>Rooms</source>
         <target>Salles</target>
         <context-group purpose="location">
@@ -173,7 +182,7 @@
         </context-group>
       </trans-unit>
 
-      <trans-unit id="sidebar-btn_contacts" datatype="html"> 
+      <trans-unit id="sidebar-btn_contacts" datatype="html">
         <source>Contacts</source>
         <target>Contacts</target>
         <context-group purpose="location">
@@ -182,7 +191,7 @@
         </context-group>
       </trans-unit>
 
-      <trans-unit id="sidebar-add" datatype="html"> 
+      <trans-unit id="sidebar-add" datatype="html">
         <source>Add</source>
         <target>Ajouter</target>
         <context-group purpose="location">
@@ -254,8 +263,156 @@
           <context context-type="sourcefile">app/dashboard/chat-window/chat-window.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
-      </trans-unit>      
+      </trans-unit>
 <!--Chat Component Ends-->
+
+<!--Settings Component begins-->
+      <trans-unit id="settings-btn_back" datatype="html">
+        <source>Back</source>
+        <target>Retour</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-title" datatype="html">
+        <source>Settings</source>
+        <target>Réglages</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-radio_language" datatype="html">
+        <source>Change Language</source>
+        <target>Changer de langue</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-radio_password" datatype="html">
+        <source>Change Password</source>
+        <target>Changer le mot de passe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-btn_language" datatype="html">
+        <source>Change Language</source>
+        <target>Changer de langue</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-current_password" datatype="html">
+        <source>Current Password</source>
+        <target>Mot de passe actuel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-new_password" datatype="html">
+        <source>New Password</source>
+        <target>Nouveau mot de passe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-confirm_password" datatype="html">
+        <source> Confirm New Password </source>
+        <target>Confirmer le nouveau mot de passe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-btn_password" datatype="html">
+        <source>Change Password</source>
+        <target>Changer le mot de passe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      /////////
+
+      <trans-unit id="settings-alert_l1" datatype="html">
+        <source>Change Successfully</source>
+        <target>Changer avec succès</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-alert_l2" datatype="html">
+        <source>Error</source>
+        <target>Erreur</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-alert_match" datatype="html">
+        <source>Passwords don't match</source>
+        <target>Les mots de passe ne correspondent pas</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-alert_p1" datatype="html">
+        <source>Error Try Again</source>
+        <target>Erreur réessayer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-alert_p2" datatype="html">
+        <source>Change Successfully</source>
+        <target>Changer avec succès</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-alert_p3" datatype="html">
+        <source>Wrong password</source>
+        <target>Mauvais mot de passe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="settings-alert_p4" datatype="html">
+        <source>User does not exist</source>
+        <target>L'utilisateur n'existe pas</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+<!--Settings Component Ends-->
     </body>
   </file>
 </xliff>

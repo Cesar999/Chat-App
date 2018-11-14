@@ -4,16 +4,16 @@
     <div class="col-lg-6 box">
     <span>
       <button class="btn btn-primary" type="submit" (click)="onBack()">
-        <span>Back</span>
+        <span  i18n="@@settings-btn_back">Back</span>
       </button>
-      <span class="btn settings_title">Settings</span>
+      <span class="btn settings_title"  i18n="@@settings-title">Settings</span>
     </span>
       <br>
-      <input #change_language type="radio" id="change_language"  name="option" (change)="onSelectionChange($event)"/>
-      <label for="change_language">&nbsp;Change Language</label>
+      <input #change_language type="radio" id="change_language"  name="option" (change)="onSelectionChange($event)"/>&nbsp;
+      <label for="change_language" i18n="@@settings-radio_language">Change Language</label>
       &nbsp; &nbsp;
-      <input #change_password type="radio" id="change_password"  name="option" (change)="onSelectionChange($event)"/>
-      <label for="change_password">&nbsp;Change Password</label>
+      <input #change_password type="radio" id="change_password"  name="option" (change)="onSelectionChange($event)"/>&nbsp;
+      <label for="change_password"  i18n="@@settings-radio_password">Change Password</label>
 
       <hr>
 
@@ -27,37 +27,49 @@
                     </option>
                 </select>
               </div>
-              <br>
-              <span class='alert' *ngIf="show_msg">{{msg}}</span>
+              <span class='alert' *ngIf="show_msg">
+                  <span class='alert' i18n="@@settings-alert_l1" *ngIf="msg === 'Change Successfully'">Change Successfully</span>
+                  <span class='alert' i18n="@@settings-alert_l2" *ngIf="msg === 'Error'">Error</span>
+              </span>
+
               <br>
               <br>
             <button [disabled]="!changeLanguageForm.valid" class="btn btn-primary" type="submit">
-              <span>Change Language</span>
+              <span i18n="@@settings-btn_language">Change Language</span>
             </button>
         </form>
       </div>
 
       <div *ngIf="showPass">
         <form [formGroup]="changePassForm" class="form-group" (ngSubmit)="onSubmitPassword()">
-            <label for="old_password"><i class="fas fa-user-tag"></i>&nbsp; <span>Current Password</span>
+            <label for="old_password"><i class="fas fa-user-tag"></i>&nbsp; <span  i18n="@@settings-current_password">Current Password</span>
             </label>
             <input class="form-control" id="old_password" formControlName="old_password">
             <br>
             <label for="password"><i class="fas fa-key"></i> &nbsp;
-            <span>New Password</span>
+            <span  i18n="@@settings-new_password">New Password</span>
             </label>
             <input class="form-control" id="password" formControlName="password" type="password">
             <br>
             <label for="password2"><i class="fas fa-key"></i>&nbsp;
-            <span> Confirm New Password </span>
+            <span  i18n="@@settings-confirm_password"> Confirm New Password </span>
             </label>
             <input class="form-control" id="password2" formControlName="password2" (input)="onChange()" type="password">
-            <span class="alert" *ngIf="invalidPass&&changePassForm.get('password2').dirty">Passwords don't match</span>
-            <span class='alert' *ngIf="show_msg">{{msg}}</span>
+
+            <span class="alert" *ngIf="invalidPass&&changePassForm.get('password2').dirty" i18n="@@settings-alert_match">
+              Passwords don't match
+            </span>
+
+            <span class='alert' *ngIf="show_msg">
+                <span class='alert' i18n="@@settings-alert_p1" *ngIf="msg === 'Error Try Again'">Error Try Again</span>
+                <span class='alert' i18n="@@settings-alert_p2" *ngIf="msg === 'Change Successfully'">Change Successfully</span>
+                <span class='alert' i18n="@@settings-alert_p3" *ngIf="msg === 'Wrong password'">Wrong password</span>
+                <span class='alert' i18n="@@settings-alert_p4" *ngIf="msg === 'User does not exist'">User does not exist</span>
+            </span>
             <br>
             <br>
           <button [disabled]="!changePassForm.valid" class="btn btn-primary" type="submit">
-          <span>Change Password</span>
+          <span  i18n="@@settings-btn_password">Change Password</span>
           </button>
         </form>
       </div>

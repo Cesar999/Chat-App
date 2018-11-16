@@ -3,12 +3,11 @@ import * as bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import socket from 'socket.io';
-
-const url_auth = 'http://localhost:3000';
-const url_mongo = 'mongodb://localhost';
+import { url_auth, url_mongo_notify  } from '../../urls_const';
 
 // START MONGOOSE---------------------------------------
-mongoose.connect(process.env.MONGODB_URI || url_mongo + '/zchat-project-notification-1', { useNewUrlParser: true });
+mongoose.connect(url_mongo_notify + '/zchat-project-notification-1', { useNewUrlParser: true });
+// process.env.MONGODB_URI ||
 
 const Schema = mongoose.Schema;
 
@@ -220,6 +219,9 @@ app.post('/leave-room', async function(req, res) {
     await res.send({msg: 'left room'});
 });
 
+app.get('/x', function(req, res) {
+  res.send({msg: 'Hello Notify'});
+});
 
 // -------------------------------------------------
 

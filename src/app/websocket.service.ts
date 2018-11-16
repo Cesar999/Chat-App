@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Subject, Observable } from 'rxjs';
-
-const url_noty = 'http://localhost:3001';
-const url_auth = '';
+import { url_noty } from '../urls_const';
 
 @Injectable({
   providedIn: 'root'

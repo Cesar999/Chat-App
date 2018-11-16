@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-
-const url_noty = 'http://localhost:3001';
-const url_auth = 'http://localhost:3000';
+import { url_auth } from '../../urls_const';
 
 @Injectable({
   providedIn: 'root'

@@ -8,11 +8,11 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
 
-const url_noty = 'http://localhost:3001';
-const url_mongo = 'mongodb://localhost';
+import { url_noty, url_mongo_auth  } from '../../urls_const';
 
 // ---------- MONGOOSE -----------------------------------
-mongoose.connect(process.env.MONGODB_URI || url_mongo + '/zchat-project-auth-1', { useNewUrlParser: true });
+mongoose.connect(url_mongo_auth + '/zchat-project-auth-1', { useNewUrlParser: true });
+// process.env.MONGODB_URI ||
 
 mongoose.set('useCreateIndex', true);
 
@@ -138,7 +138,7 @@ app.post('/login', (req, res) => {
                             console.log(temp);
                             axios.post(url_noty + '/save-user', temp)
                             .then((response: any) => {console.log(response.data); })
-                            .catch(() => console.log('Axios Catch'));
+                            .catch((e) => console.log('Axios Catch', e));
                         });
                     })
                     .catch(() => {console.log('Find user to copy CATCH'); });
@@ -213,3 +213,6 @@ app.post('/change-language', function(req, res) {
 
 });
 
+app.get('/x', function(req, res) {
+  res.send({msg: 'Hello Auth'});
+});

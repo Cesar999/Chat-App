@@ -130,13 +130,17 @@ app.post('/register', function (req, res) {
                                 .catch(function (e) { return console.log('Axios Catch', e); });
                         });
                     })
-                        .catch(function () { console.log('Find user to copy CATCH'); });
+                        .catch(function () {
+                        console.log('Find user to copy CATCH');
+                        res.send('Error registration nested');
+                    });
                 });
             });
         }
     })
         .catch(function (e) {
         console.log('Register catch');
+        res.send('Error registration main');
     });
 });
 app.get('/secret', passport_1.default.authenticate('jwt', { session: false }), function (req, res) {

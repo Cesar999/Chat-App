@@ -1,9 +1,0 @@
-// export const url_noty = 'http://localhost:3001';
-// export const url_auth = 'http://localhost:3000';
-// export const url_mongo_notify = 'mongodb://localhost';
-// export const url_mongo_auth = 'mongodb://localhost';
-
-export const url_noty = 'http://192.168.99.100:3001';
-export const url_auth = 'http://192.168.99.100:3000';
-export const url_mongo_notify = 'mongodb://database_notify';
-export const url_mongo_auth = 'mongodb://database_auth:';

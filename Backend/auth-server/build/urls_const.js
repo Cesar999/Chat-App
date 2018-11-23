@@ -4,7 +4,11 @@
 // export const url_mongo_notify = 'mongodb://localhost';
 // export const url_mongo_auth = 'mongodb://localhost';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.url_noty = 'http://192.168.99.100:3001';
-exports.url_auth = 'http://192.168.99.100:3000';
+// export const url_noty = 'http://192.168.99.100:3001';
+// export const url_auth = 'http://192.168.99.100:3000';
+// export const url_mongo_notify = 'mongodb://database_notify';
+// export const url_mongo_auth = 'mongodb://database_auth';
+exports.url_noty = '/api/notify';
+exports.url_auth = '/api/auth';
 exports.url_mongo_notify = 'mongodb://database_notify';
 exports.url_mongo_auth = 'mongodb://database_auth';

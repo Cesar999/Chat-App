@@ -9,7 +9,7 @@ if (environment.production) {
 }
 
 if (localStorage.getItem('locale') === null) {
-  if(navigator.language.split('-')[0] === 'es'){
+  if (navigator.language.split('-')[0] === 'es') {
     localStorage.setItem('locale', 'es');
   } else {
     localStorage.setItem('locale', 'en');

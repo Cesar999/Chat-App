@@ -141,13 +141,17 @@ app.post('/login', (req, res) => {
                             .catch((e) => console.log('Axios Catch', e));
                         });
                     })
-                    .catch(() => {console.log('Find user to copy CATCH'); });
+                    .catch(() => {
+                      console.log('Find user to copy CATCH');
+                      res.send('Error registration nested');
+                    });
                   });
               });
           }
     })
     .catch((e) => {
       console.log('Register catch');
+      res.send('Error registration main');
     });
 
   });

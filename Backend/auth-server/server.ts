@@ -8,10 +8,27 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
 
-import { url_noty, url_mongo_auth  } from '../../urls_const';
+import { url_noty_be, url_mongo_auth  } from '../../urls_const';
 
 // ---------- MONGOOSE -----------------------------------
-mongoose.connect(url_mongo_auth + '/zchat-project-auth-1', { useNewUrlParser: true });
+// mongoose.connect(url_mongo_auth + '/zchat-project-auth-1', {
+//   autoReconnect: true,
+//   reconnectInterval: 5000,
+//   reconnectTries: 60,
+//   useNewUrlParser: true });
+
+  const connectWithRetry = function() {
+    return mongoose.connect(url_mongo_auth + '/zchat-project-auth-1', { useNewUrlParser: true },
+    function(err) {
+      if (err) {
+        console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+        setTimeout(connectWithRetry, 5000);
+      }
+    });
+  };
+
+  connectWithRetry();
+
 // process.env.MONGODB_URI ||
 
 mongoose.set('useCreateIndex', true);
@@ -136,7 +153,7 @@ app.post('/login', (req, res) => {
                         .then((u: any) => {
                             const temp = {_id: u._id, username: u.username};
                             console.log(temp);
-                            axios.post(url_noty + '/save-user', temp)
+                            axios.post(url_noty_be + '/save-user', temp)
                             .then((response: any) => {console.log(response.data); })
                             .catch((e) => console.log('Axios Catch', e));
                         });

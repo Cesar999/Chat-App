@@ -3,11 +3,25 @@ import * as bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import socket from 'socket.io';
-import { url_auth, url_mongo_notify  } from '../../urls_const';
+import { url_auth_be, url_mongo_notify  } from '../../urls_const';
+
 
 // START MONGOOSE---------------------------------------
-mongoose.connect(url_mongo_notify + '/zchat-project-notification-1', { useNewUrlParser: true });
-// process.env.MONGODB_URI ||
+// mongoose.connect(url_mongo_notify + '/zchat-project-notification-1', { useNewUrlParser: true });
+
+const connectWithRetry = function() {
+  return mongoose.connect(url_mongo_notify + '/zchat-project-notification-1', { useNewUrlParser: true },
+  function(err) {
+    if (err) {
+      console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+      setTimeout(connectWithRetry, 5000);
+    }
+  });
+};
+
+connectWithRetry();
+
+// // process.env.MONGODB_URI ||
 
 const Schema = mongoose.Schema;
 
@@ -87,19 +101,23 @@ app.use((req, res, next) => {
   // ---------------------------------------
 
   app.get('/check-auth', function(req, res) {
-    console.log(req.headers.authorization);
+    // console.log(req.headers.authorization);
     const config = {
         headers: {
             authorization: req.headers.authorization,
         }
       };
-    axios.get(url_auth + '/check-auth', config)
+    axios.get(url_auth_be + '/check-auth', config)
     .then(function (response) {
-        console.log(response.data);
-        res.send(response.data);
+        console.log(response.data, 'response data check auth');
+        if (response.data.authorization) {
+          res.send(response.data);
+        } else {
+          res.send('Data Undefined');
+        }
     })
     .catch((e) => {
-        console.log(e.response.data);
+       console.log('Check auth error');
         res.send('Unauthorized');
     });
 });
@@ -110,7 +128,7 @@ app.post('/save-user', function(req, res) {
     const user1 = new User({...req.body});
     user1.save()
     .then((u) => {
-        // console.log(u);
+        console.log(u);
     })
     .catch((e) => {
        // console.log(e);
@@ -320,6 +338,7 @@ interface ISocket extends SocketIO.Socket {
 const users: { [key: string]: ISocket} = {};
 
 // START SOCKETS-----------------------------------
+// server
 const io = socket(server);
 // tslint:disable-next-line:no-shadowed-variable
 io.sockets.on('connection', (socket: ISocket) => {
@@ -336,7 +355,7 @@ io.sockets.on('connection', (socket: ISocket) => {
         if (data.username !== undefined) {
             socket.nickname = data.username;
             users[socket.nickname] = socket;
-           // console.log(socket.nickname, Object.keys(users));
+            console.log(socket.nickname, Object.keys(users));
             emitContacts(socket.nickname);
             updateFriendContact(socket.nickname);
         }
@@ -358,19 +377,19 @@ io.sockets.on('connection', (socket: ISocket) => {
     });
 
     socket.on('on-invite', async (data) => {
-      console.log(data);
-      const user = await User.findOne({username: data.invite});
-      await Conversation.findById({_id: data.toRoom})
-      .then((c: any) => {
-      if (c.participants.indexOf(user._id) === -1) {
-        c.participants.push(user._id);
-        c.save();
-        if (users[data.invite]) {
-          users[data.invite].emit('listen invited', {msg: 'invited'});
-        }
-        // console.log(data.invite);
-    }
-    });
+      // console.log(data);
+        const user = await User.findOne({username: data.invite});
+        await Conversation.findById({_id: data.toRoom})
+        .then((c: any) => {
+        if (c.participants.indexOf(user._id) === -1) {
+          c.participants.push(user._id);
+          c.save();
+          if (users[data.invite]) {
+            users[data.invite].emit('listen invited', {msg: 'invited'});
+          }
+          // console.log(data.invite);
+      }
+      });
    });
 
    socket.on('seen message', (data) => {
@@ -406,7 +425,7 @@ async function emitContacts(socket_nickname: string) {
             users[socket_nickname].emit('list contacts', list);
         }
     } catch (error) {
-        console.log('error');
+        console.log(error, users, 'XXXXXXXXXXXXXXX');
     }
 
 }

@@ -64,8 +64,17 @@ var axios_1 = __importDefault(require("axios"));
 var socket_io_1 = __importDefault(require("socket.io"));
 var urls_const_1 = require("../../urls_const");
 // START MONGOOSE---------------------------------------
-mongoose_1.default.connect(urls_const_1.url_mongo_notify + '/zchat-project-notification-1', { useNewUrlParser: true });
-// process.env.MONGODB_URI ||
+// mongoose.connect(url_mongo_notify + '/zchat-project-notification-1', { useNewUrlParser: true });
+var connectWithRetry = function () {
+    return mongoose_1.default.connect(urls_const_1.url_mongo_notify + '/zchat-project-notification-1', { useNewUrlParser: true }, function (err) {
+        if (err) {
+            console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+            setTimeout(connectWithRetry, 5000);
+        }
+    });
+};
+connectWithRetry();
+// // process.env.MONGODB_URI ||
 var Schema = mongoose_1.default.Schema;
 var userSchema = new Schema({
     username: { type: String },
@@ -127,19 +136,24 @@ app.use(function (req, res, next) {
 });
 // ---------------------------------------
 app.get('/check-auth', function (req, res) {
-    console.log(req.headers.authorization);
+    // console.log(req.headers.authorization);
     var config = {
         headers: {
             authorization: req.headers.authorization,
         }
     };
-    axios_1.default.get(urls_const_1.url_auth + '/check-auth', config)
+    axios_1.default.get(urls_const_1.url_auth_be + '/check-auth', config)
         .then(function (response) {
-        console.log(response.data);
-        res.send(response.data);
+        console.log(response.data, 'response data check auth');
+        if (response.data.authorization) {
+            res.send(response.data);
+        }
+        else {
+            res.send('Data Undefined');
+        }
     })
         .catch(function (e) {
-        console.log(e.response.data);
+        console.log('Check auth error');
         res.send('Unauthorized');
     });
 });
@@ -149,7 +163,7 @@ app.post('/save-user', function (req, res) {
     var user1 = new User(__assign({}, req.body));
     user1.save()
         .then(function (u) {
-        // console.log(u);
+        console.log(u);
     })
         .catch(function (e) {
         // console.log(e);
@@ -404,6 +418,7 @@ function createRoomConversation(user1_id, room) {
 }
 var users = {};
 // START SOCKETS-----------------------------------
+// server
 var io = socket_io_1.default(server);
 // tslint:disable-next-line:no-shadowed-variable
 io.sockets.on('connection', function (socket) {
@@ -429,7 +444,7 @@ io.sockets.on('connection', function (socket) {
         if (data.username !== undefined) {
             socket.nickname = data.username;
             users[socket.nickname] = socket;
-            // console.log(socket.nickname, Object.keys(users));
+            console.log(socket.nickname, Object.keys(users));
             emitContacts(socket.nickname);
             updateFriendContact(socket.nickname);
         }
@@ -451,9 +466,7 @@ io.sockets.on('connection', function (socket) {
         var user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log(data);
-                    return [4 /*yield*/, User.findOne({ username: data.invite })];
+                case 0: return [4 /*yield*/, User.findOne({ username: data.invite })];
                 case 1:
                     user = _a.sent();
                     return [4 /*yield*/, Conversation.findById({ _id: data.toRoom })
@@ -513,7 +526,7 @@ function emitContacts(socket_nickname) {
                 case 2: return [3 /*break*/, 4];
                 case 3:
                     error_1 = _a.sent();
-                    console.log('error');
+                    console.log(error_1, users, 'XXXXXXXXXXXXXXX');
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

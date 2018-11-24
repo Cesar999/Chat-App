@@ -20,7 +20,20 @@ var passport_1 = __importDefault(require("passport"));
 var passport_jwt_1 = __importDefault(require("passport-jwt"));
 var urls_const_1 = require("../../urls_const");
 // ---------- MONGOOSE -----------------------------------
-mongoose_1.default.connect(urls_const_1.url_mongo_auth + '/zchat-project-auth-1', { useNewUrlParser: true });
+// mongoose.connect(url_mongo_auth + '/zchat-project-auth-1', {
+//   autoReconnect: true,
+//   reconnectInterval: 5000,
+//   reconnectTries: 60,
+//   useNewUrlParser: true });
+var connectWithRetry = function () {
+    return mongoose_1.default.connect(urls_const_1.url_mongo_auth + '/zchat-project-auth-1', { useNewUrlParser: true }, function (err) {
+        if (err) {
+            console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+            setTimeout(connectWithRetry, 5000);
+        }
+    });
+};
+connectWithRetry();
 // process.env.MONGODB_URI ||
 mongoose_1.default.set('useCreateIndex', true);
 var Schema = mongoose_1.default.Schema;
@@ -125,7 +138,7 @@ app.post('/register', function (req, res) {
                             .then(function (u) {
                             var temp = { _id: u._id, username: u.username };
                             console.log(temp);
-                            axios_1.default.post(urls_const_1.url_noty + '/save-user', temp)
+                            axios_1.default.post(urls_const_1.url_noty_be + '/save-user', temp)
                                 .then(function (response) { console.log(response.data); })
                                 .catch(function (e) { return console.log('Axios Catch', e); });
                         });

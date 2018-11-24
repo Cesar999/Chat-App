@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Subject, Observable } from 'rxjs';
-import { url_noty } from '../../urls_const';
+import { url_noty_ws } from '../../urls_const';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class WebsocketService {
   socket;
 
   constructor() {
-    this.socket = io(url_noty);
+    this.socket = io(url_noty_ws);
   }
 
 

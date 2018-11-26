@@ -110,7 +110,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
 
 
   logOut() {
-    console.log('unauthorized');
+    // console.log('unauthorized');
     this.cookieService.deleteAll();
     localStorage.clear();
     this.router.navigate(['/login']);

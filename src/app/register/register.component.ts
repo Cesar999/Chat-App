@@ -50,16 +50,16 @@ export class RegisterComponent implements OnInit {
     this.appService.postRegisterUser(this.projectForm.value)
     .subscribe(
       (response) => {
-        console.log(response['flag']);
+        // console.log(response['flag']);
         if (response['flag']) {
           alert(this.myAlert2.nativeElement.innerHTML);
           this.router.navigate(['/login']);
         } else {
-          console.log(this.myAlert1);
+          // console.log(this.myAlert1);
           alert(this.myAlert1.nativeElement.innerHTML);
         }
       },
-      (error) => console.log(error)
+      (error) => { /*console.log(error)*/ }
     );
   }
 

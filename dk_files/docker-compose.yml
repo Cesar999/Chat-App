@@ -1,0 +1,41 @@
+version: "3"
+# Define the services/containers to be run
+services:
+  database_auth: # name of the service
+    image: mongo # specify image to build container from
+    # command: mongod --port 64315
+    ports:
+      - "27016:27017" # specify port forewarding
+    volumes:
+      - authDB:/data/authDB
+
+  database_notify: # name of the service
+    image: mongo # specify image to build container from
+    # command: mongod --port 64329
+    ports:
+      - "27015:27017" # specify port forewarding
+    volumes:
+      - notifyDB:/data/notifyDB
+
+  angular: # name of the service
+    build: ./chatApp # specify the directory of the Dockerfile
+    ports:
+      - "4200:80" # specify port forewarding
+
+  auth: #name of the service
+    build: ./chatApp/Backend/auth-server # specify the directory of the Dockerfile
+    ports:
+      - "3000:3000" #specify ports forewarding
+    links:
+      - database_auth # link this service to the database service
+
+  notify: #name of the service
+    build: ./chatApp/Backend/notification-server # specify the directory of the Dockerfile
+    ports:
+      - "3001:3001" #specify ports forewarding
+    links:
+      - database_notify # link this service to the database service
+
+volumes:
+  authDB:
+  notifyDB:       

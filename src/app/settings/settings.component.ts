@@ -63,7 +63,7 @@ changePassForm: FormGroup;
             this.settingsService.changePassword({...this.changePassForm.value, username: localStorage.getItem('username')})
             .subscribe(
               (res) => {
-                console.log(res);
+                // console.log(res);
                 this.changePassForm.reset();
                 this.msg = res['msg'];
                 this.show_msg = true;
@@ -82,7 +82,7 @@ changePassForm: FormGroup;
   }
 
   onSubmitLanguage() {
-    console.log(this.changeLanguageForm.value);
+    // console.log(this.changeLanguageForm.value);
     this.appService.checkAuth().subscribe(
       (response) => {
          if (response['authorization'] === true ) {
@@ -90,7 +90,7 @@ changePassForm: FormGroup;
             this.settingsService.changeLanguage({...this.changeLanguageForm.value, username: localStorage.getItem('username')})
             .subscribe(
               (res) => {
-                console.log(res);
+                // console.log(res);
                 this.changePassForm.reset();
                 if (res['msg'] === 'Change Successfully') {
                   this.onChangeLanguage(res['lang']);
@@ -127,7 +127,7 @@ changePassForm: FormGroup;
   }
 
   logOut() {
-    console.log('unauthorized');
+    // console.log('unauthorized');
     this.cookieService.deleteAll();
     localStorage.clear();
     this.router.navigate(['/login']);

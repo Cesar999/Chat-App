@@ -1,0 +1,144 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-service
+spec:
+  type: NodePort
+  externalTrafficPolicy: Local
+  selector:
+    component: ngweb
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: ngweb
+  template:
+    metadata:
+      labels:
+        component: ngweb
+    spec:
+      containers:
+        - name: angular
+          image: chatall_angular:v01
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notify-service
+spec:
+  type: ClusterIP
+  selector:
+    component: notify
+  ports:
+    - port: 3001
+      targetPort: 3001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notify-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: notify
+  template:
+    metadata:
+      labels:
+        component: notify
+    spec:
+      volumes:
+      - name: mongodb-data-notify
+        persistentVolumeClaim:
+          claimName: db-pvc-notify
+      containers:
+        - name: notify
+          image: chatall_notify:v01
+          ports:
+            - containerPort: 3001
+        - name: mongodb-notify
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongodb-data-notify
+              mountPath: /data/db
+              subPath: db-notify
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  type: ClusterIP
+  selector:
+    component: auth
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: auth
+  template:
+    metadata:
+      labels:
+        component: auth
+    spec:
+      volumes:
+      - name: mongodb-data-auth
+        persistentVolumeClaim:
+          claimName: db-pvc-auth
+      containers:
+        - name: auth
+          image: chatall_auth:v01
+          ports:
+            - containerPort: 3000
+        - name: mongodb-auth
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongodb-data-auth
+              mountPath: /data/db
+              subPath: db-auth
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc-auth
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc-notify
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---

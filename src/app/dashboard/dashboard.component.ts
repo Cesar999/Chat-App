@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
  this.appService.checkAuth().subscribe(
       (response) => {
-        console.log(response, 'dashboard');
+        // console.log(response, 'dashboard');
         if (response['authorization'] === true ) {
           this.mainUser = localStorage.getItem('username');
           this.socket.emitOnline({username: this.mainUser});

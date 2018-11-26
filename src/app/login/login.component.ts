@@ -35,11 +35,11 @@ export class LoginComponent implements OnInit {
     this.appService.postLoginUser(this.projectForm.value)
     .subscribe(
       (response) => {
-        console.log(response);
+       // console.log(response);
         if (response['token']) {
           this.cookieService.set( 'TOKEN', response['token']);
           this.cookieValue = this.cookieService.get('TOKEN');
-          console.log(this.cookieValue);
+         // console.log(this.cookieValue);
           localStorage.setItem('locale', response['language']);
           localStorage.setItem('username', response['username']);
           window.location.reload();
@@ -49,10 +49,10 @@ export class LoginComponent implements OnInit {
           setTimeout(() => {
             this.show_msg = false;
           }, 2000);
-          console.log(response);
+          // console.log(response);
         }
       },
-      (error) => console.log(error)
+    (error) => { /* console.log(error) */}
     );
   }
 

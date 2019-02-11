@@ -17,7 +17,7 @@
       <form [formGroup]="projectForm" class="form-group"
       (ngSubmit)="onSubmit()">
           <label for="username"><i class="fas fa-user-tag"></i>&nbsp;
-          <span i18n="@@login-username">Username</span> 
+          <span i18n="@@login-username">Username</span>
           </label>
           <input class="form-control" id="username" formControlName="username">
           <span class='alert' *ngIf="show_msg">
